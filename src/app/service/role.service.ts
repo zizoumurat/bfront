@@ -24,7 +24,7 @@ export class RoleService extends BaseService<RoleModel> implements IRoleService 
     }
 
     override async getAll(): Promise<RoleModel[]> {
-        return firstValueFrom(this.http.get<RoleModel[]>(`${BASE_URL}/${this.endPoint}/get-complate-role"`));
+        return firstValueFrom(this.http.get<RoleModel[]>(`${BASE_URL}/${this.endPoint}/get-complate-role`));
     }
 
     async updateRolePermission(roleId: number, permissionIdList: number[]): Promise<void> {

@@ -1,17 +1,5 @@
 <i class="pi pi-fw pi-shopping-bag page-icon"></i>
 
-<div class="grid my-4">
-    <div class="col-12">
-        <div class="flex">
-            <button pButton *ngFor="let button of filterButtons; let i = index" pButton class="p-button-sm mr-2"
-                [ngClass]="{
-                    'bg-orange-400 border-orange-400': activeFilter === i,
-                    'bg-orange-200 border-orange-200': activeFilter !== i
-                }" [label]="button" (click)="applyFilter(i)"></button>
-        </div>
-    </div>
-</div>
-
 <p-table #dt [value]="items" [paginator]="true" [rows]="pageSize" [totalRecords]="count" [lazy]="true"
     [loading]="loading" (onLazyLoad)="loadData($event)" dataKey="id"
     styleClass="p-datatable-gridlines default-table custom-paginator">

@@ -16,7 +16,7 @@ export class OrderPreparationService extends BaseService<OrderPreparationModel> 
     }
 
     async createOrder(data: any): Promise<void> {
-        return firstValueFrom(this.http.post<void>(`${BASE_URL}/${this.endPoint}/create-orde`, data))
+        return firstValueFrom(this.http.post<void>(`${BASE_URL}/${this.endPoint}/create-order`, data))
 
     }
 }

@@ -9,8 +9,6 @@ import { AuthHelper } from 'src/app/core/helpers/auth/auth.helper';
 import { ApprovalStatus } from 'src/app/core/enums/request.enum';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ListItemModel } from 'src/app/core/domain/listItem.model';
-import { IOrderPreparationService } from 'src/app/core/services/i.orderPreparation.service';
-import { ORDERPREPARATION_SERVICE } from 'src/app/service/orderPreparationService';
 import { NonconformityReasonEnum, OrderStatusEnum } from 'src/app/core/domain/orderPreparation.model';
 import { ORDER_SERVICE } from 'src/app/service/orderService';
 import { IOrderService } from 'src/app/core/services/i.order.service';
@@ -129,27 +127,6 @@ export class StatusUpdateComponent implements OnInit {
         this.visibleOrderList = true;
     }
 
-    applyFilter(index: number) {
-        this.activeFilter = index;
-
-        if (index === 0) {
-            this.searchObject = { status: OrderStatusEnum.OrderPending };
-        }
-
-        if (index === 1) {
-            this.searchObject = { status: OrderStatusEnum.Delivered };
-        }
-
-        if (index === 2) {
-            this.searchObject = { status: OrderStatusEnum.OrderCancelled };
-        }
-
-        if (index === 3) {
-            this.searchObject = { status: OrderStatusEnum.NonconformityReported };
-        }
-
-        this.loadData();
-    }
 
     submitFilter() {
         this.searchObject = { isForApproval: true, ...this.filterForm.value };
@@ -179,6 +156,8 @@ export class StatusUpdateComponent implements OnInit {
             paginationFilter.sortByMultiOrder = [event.sortOrder];
             paginationFilter.pageSize = event.rows;
         }
+
+       this.searchObject = { status: OrderStatusEnum.Shipped }
 
         var result = await this.service.getPaginationList(paginationFilter, this.searchObject);
 

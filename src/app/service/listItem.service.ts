@@ -15,7 +15,7 @@ export class ListItemService implements IListItemService {
     }
 
     async getPublicSelectedItemList(entityName: string, filters?: { [key: string]: string; }): Promise<ListItemModel[]> {
-        const url = `${BASE_URL}/list/publicList/${entityName}`;
+        const url = `${BASE_URL}/publicList/${entityName}`;
         let params = new HttpParams();
 
         if (!!filters) {

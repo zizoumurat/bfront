@@ -17,7 +17,7 @@ export class RequestService extends BaseService<RequestModel> implements IReques
     }
 
     async approveRejectRequest(data: { id: number; comment: string; status: ApprovalStatus }): Promise<void> {
-        return await firstValueFrom(this.http.post<void>(`${BASE_URL}/${this.endPoint}/approve-reject-reques`, data))
+        return await firstValueFrom(this.http.post<void>(`${BASE_URL}/${this.endPoint}/approve-reject-request`, data))
     }
 
     async assignManager(id: number): Promise<void> {

@@ -12,7 +12,7 @@ import { BASE_URL } from 'src/environments/environment';
 export class SupplierService extends BaseService<SupplierModel> implements ISupplierService {
 
     constructor(protected override http: HttpClient) {
-        super(http, 'Suppliers');
+        super(http, 'Supplier');
     }
 
     getListByCategory({ categoryId, channelType, cityId }: { categoryId: number, channelType: number, cityId?: number }): Promise<SupplierModelForCategoryModel[]> {
