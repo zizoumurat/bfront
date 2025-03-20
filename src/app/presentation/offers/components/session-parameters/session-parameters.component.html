@@ -1,0 +1,22 @@
+<p-panel *ngIf="formGroup"  [formGroup]="formGroup" class="filter-panel" header="{{ 'sessionParameters' | translate }}" [toggleable]="false">
+    <div class="checkbox-group">
+        <div class="custom-checkbox pink">
+            <p-checkbox inputId="companyNames" [binary]="true" formControlName="showCompanyNames"></p-checkbox>
+            <label for="companyNames">{{ 'showCompanyNames' | translate }}</label>
+        </div>
+
+        <div class="custom-checkbox blue">
+            <p-checkbox inputId="showAllOffers" [binary]="true" formControlName="showAllOffers"></p-checkbox>
+            <label for="showAllOffers">{{ 'showAllOffers' | translate }}</label>
+        </div>
+
+        <div class="custom-checkbox green">
+            <p-checkbox inputId="showOfferRankings" [binary]="true" formControlName="showOfferRankings"></p-checkbox>
+            <label for="showOfferRankings">{{ 'showOfferRankings' | translate }}</label>
+        </div>
+
+        <div>
+            {{ 'sessionInfoText' | translate }}
+        </div>
+    </div>
+</p-panel>

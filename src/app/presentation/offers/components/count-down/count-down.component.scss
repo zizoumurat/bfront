@@ -1,0 +1,78 @@
+.countdown-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.countdown {
+    display: flex;
+    justify-content: space-between;
+    font-size: 32px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.time-box {
+    flex: 1;
+    margin: 0 10px;
+    background: #e0f7fa;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.time-box:hover {
+    transform: scale(1.05);
+}
+
+.time-box span {
+    display: block;
+    font-size: 48px;
+    font-weight: bold;
+    color: #00796b;
+}
+
+.label {
+    font-size: 18px;
+    color: #555;
+}
+
+h1 {
+    margin: 0;
+    transition: transform 0.5s;
+}
+
+.shake {
+    animation: shake 0.5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translate(0);
+    }
+    25% {
+        transform: translate(-5px);
+    }
+    50% {
+        transform: translate(5px);
+    }
+    75% {
+        transform: translate(-5px);
+    }
+}
+
+.fade-out {
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

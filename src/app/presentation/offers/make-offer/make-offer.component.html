@@ -1,0 +1,86 @@
+<div class="grid mt-4">
+    <div class="col-4">
+        <app-count-down [targetDate]="targetDate"></app-count-down>
+    </div>
+    <div class="col-5 col-offset-3">
+        <app-info-box [request]="request"></app-info-box>
+    </div>
+</div>
+
+<div *ngIf="tableData" class="mt-4">
+    <p-table [value]="tableData.rows" styleClass="p-datatable-gridlines default-table custom-paginator"
+        [scrollable]="true" dataKey="tblTemplateData">
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngFor="let col of tableData.columns">
+                    <span>{{col.title }}</span>
+                </th>
+                <th><span>{{'unitPrice' | translate}}</span></th>
+                <th><span>Vade</span></th>
+                <th><span>Tutar</span></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td *ngFor="let col of tableData.columns">{{ row[col.name] }}
+                    <span *ngIf="col.name==='quantity'" style="margin-left:10px">Adet</span>
+                </td>
+                <td>
+                    <div class="p-inputgroup">
+                        <p-inputNumber mode="currency" [currency]="request.code" id="customSubject"
+                            [(ngModel)]="priceList[rowIndex]" styleClass="w-full" inputStyleClass="w-full"
+                            (ngModelChange)="onPriceChange(rowIndex)" class="w-full"></p-inputNumber>
+                        <span class="p-inputgroup-addon">
+                            {{request.code}}
+                        </span>
+                    </div>
+                </td>
+                <td>
+                    <div class="p-inputgroup">
+                        <input pInputText type="number" [(ngModel)]="dueDate"
+                            class="p-inputtext p-component p-element" />
+                        <span class="p-inputgroup-addon">
+                            {{'day' | translate}}
+                        </span>
+                    </div>
+                </td>
+                <td>
+                    <div class="p-inputgroup">
+                        <p-inputNumber mode="currency" [currency]="request.code" id="customSubject"
+                            [(ngModel)]="rowPriceList[rowIndex]" [disabled]="true" styleClass="w-full"
+                            inputStyleClass="w-full" class="w-full"></p-inputNumber>
+                        <span class="p-inputgroup-addon">
+                            {{request.code}}
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<div class="mt-6">
+    <div class="grid formgrid">
+        <div class="field col-5">
+            <label for="notes">{{ "supplierNotes" | translate }}</label>
+            <textarea class="textEra" rows="6" [(ngModel)]="notes" id="notes" pInputTextarea styleClass="w-full"
+                class="w-full"></textarea>
+        </div>
+        <div class="field col-3">
+            <div class="flex flex-column h-full justify-content-end">
+                <label for="notes">{{ "expirationDate" | translate }}</label>
+
+                <p-calendar class="three-side-input" styleClass="w-full" [showIcon]="true" [(ngModel)]="expirationDate"
+                    dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+        </div>
+        <div class="col-4 field">
+            <div class="flex h-full align-items-end justify-content-end">
+                <app-single-file-upload (fileUploaded)="onFileReceived($event)"></app-single-file-upload>
+                <button pButton class="orange-button w-12rem" icon="pi pi-send" [label]="'completeOffer' | translate"
+                    (click)="submitOffer()"></button>
+            </div>
+        </div>
+    </div>
+</div>

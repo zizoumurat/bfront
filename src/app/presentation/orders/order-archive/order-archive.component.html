@@ -1,0 +1,129 @@
+<i class="pi pi-fw pi-shopping-bag page-icon"></i>
+
+<div class="grid my-4">
+    <div class="col-12">
+        <div class="flex">
+            <button pButton *ngFor="let button of filterButtons; let i = index" pButton class="p-button-sm mr-2"
+                [ngClass]="{
+                    'bg-orange-400 border-orange-400': activeFilter === i,
+                    'bg-orange-200 border-orange-200': activeFilter !== i
+                }" [label]="button" (click)="applyFilter(i)"></button>
+        </div>
+    </div>
+</div>
+
+<p-table #dt [value]="items" [paginator]="true" [rows]="pageSize" [totalRecords]="count" [lazy]="true"
+    [loading]="loading" (onLazyLoad)="loadData($event)" dataKey="id"
+    styleClass="p-datatable-gridlines default-table custom-paginator">
+
+    <!-- TABLO BAŞLIKLARI -->
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="min-width: auto;"></th>
+            <th><span>Sipariş Kodu</span></th>
+            <th><span>Tedarikçi</span></th>
+            <th><span>Durum</span></th>
+            <th><span>Toplam Tutar</span></th>
+            <th><span>Tarih</span></th>
+            <th style="min-width: auto;"></th>
+        </tr>
+    </ng-template>
+
+    <!-- ANA VERİLER -->
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td>
+                <button pButton type="button"
+                    [icon]="expandedRows[item.id] ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" class="p-button-text"
+                    (click)="toggleRow(item)" [ngClass]="{'p-button-secondary': expandedRows[item.id]}">
+                </button>
+            </td>
+            <td>{{ item.orderCode }}</td>
+            <td>{{ item.orderPreparation.supplier }}</td>
+            <td>{{ ('OrderStatusEnum.' + getOrderStatus(item.status)) | translate }}</td>
+            <td>{{ item.totalPrice | currency:item.orderPreparation.currencyCode }}</td>
+            <td>{{ item.orderDate | date:'short' }}</td>
+            <td>
+                <button pButton [pTooltip]="'contactSupplier' | translate" tooltipPosition="left"
+                    class="p-button-sm green-button mr-2" icon="pi pi-comments">
+                </button>
+
+                <button pButton [pTooltip]="'reportInc' | translate" tooltipPosition="left"
+                    class="p-button-sm green-button mr-2" icon="pi pi-exclamation-triangle" (click)="handleInc(item)">
+                </button>
+
+                <button pButton [pTooltip]="'cancelOrder' | translate" tooltipPosition="left"
+                    class="p-button-sm green-button" icon="pi pi-times" (click)="cancelOrder(item)">
+                </button>
+            </td>
+        </tr>
+
+        <!-- ALT SATIR: SİPARİŞ KALEMLERİ -->
+        <tr *ngIf="expandedRows[item.id]">
+            <td colspan="7">
+                <p-table [value]="item.orderItems" dataKey="id" styleClass="p-datatable-sm default-table nested-table">
+
+                    <!-- Sipariş Kalem Başlıkları -->
+                    <ng-template pTemplate="header">
+        <tr>
+            <th><span>Ürün / Hizmet Tanımı</span></th>
+            <th><span>Birim Fiyat</span></th>
+            <th><span>Miktar</span></th>
+            <th><span>Tutar</span></th>
+        </tr>
+    </ng-template>
+
+    <!-- Sipariş Kalem Satırları -->
+    <ng-template pTemplate="body" let-detail>
+        <tr>
+            <td>{{ detail.productDefinition }}</td>
+            <td>{{ detail.unitPrice | currency:item.orderPreparation.currencyCode }}</td>
+            <td>{{ detail.quantity }} {{ item.orderPreparation.unit }}</td>
+            <td>{{ detail.totalPrice | currency:item.orderPreparation.currencyCode }}</td>
+        </tr>
+    </ng-template>
+
+</p-table>
+</td>
+</tr>
+
+</ng-template>
+</p-table>
+
+
+<p-dialog *ngIf="actionForm" [header]="'reportInc' | translate" [modal]="true" [(visible)]="visibleReportInc"
+    [style]="{ width: '35rem' }" styleClass="form-modal">
+    <form [formGroup]="actionForm" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12">
+                <label>{{ 'type' | translate }}</label>
+                <p-dropdown appendTo='body' [options]="nonconformityStatusOptions" styleClass="w-full" formControlName="type"
+                    optionLabel="name" optionValue="id"></p-dropdown>
+                <app-error-message [control]="actionForm.get('type')"></app-error-message>
+            </div>
+            <div class="field col-12">
+                <label>{{ 'subject' | translate }}</label>
+                <input pInputText class="w-full" formControlName="subject" />
+                <app-error-message [control]="actionForm.get('subject')"></app-error-message>
+            </div>
+
+            <div class="field col-12">
+                <label>{{ 'detail' | translate}}</label>
+                <textarea pInputTextarea rows="5" class="w-full" formControlName="detail"></textarea>
+                <app-error-message [control]="actionForm.get('detail')"></app-error-message>
+            </div>
+
+            <div class="field col-12">
+                <label>Bildirim Kapanma Tarihi</label>
+                <p-calendar appendTo="body" class="three-side-input" styleClass="w-full" [showIcon]="true"
+                    formControlName="dueDate" dateFormat="dd/mm/yy"></p-calendar>
+                <app-error-message [control]="actionForm.get('dueDate')"></app-error-message>
+            </div>
+
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!actionForm.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

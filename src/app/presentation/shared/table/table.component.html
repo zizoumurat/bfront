@@ -1,0 +1,47 @@
+<p-table [value]="items" styleClass="p-datatable-gridlines default-table custom-paginator" [scrollable]="true"
+    [lazy]="true" (onLazyLoad)="loadData($event)" dataKey="[dataKey]" [paginator]="showPaginatior" [rows]="rows"
+    [totalRecords]="totalRecords">>
+    <ng-template pTemplate="header">
+        <tr>
+            <th *ngFor="let column of columns" [ngStyle]="column.style"
+                [pSortableColumn]="column.sortable ? column.name : null">
+                <span>{{ column.label | translate}}<p-sortIcon *ngIf="column.sortable"
+                        [field]="column.name"></p-sortIcon> </span>
+            </th>
+            <th *ngIf="showActions" class="fixed-column sticky-column"><span>{{'actions' | translate}}</span></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr [ngClass]="{'selected-row': item === selectedItem}">
+            <td *ngFor="let column of columns" [ngStyle]="column.style">
+                <p-checkbox *ngIf="column.type === 'checkbox'" binary="true" [(ngModel)]="item.selected" (onChange)="onCheckboxChange($event, item)"></p-checkbox>
+                <div *ngIf="column.type !== 'checkbox'" class="flex flex-column"
+                    [innerHTML]="item[column.name] | formatColumn: column.type : column.currencyCode"></div>
+            </td>
+            <td *ngIf="showActions" class="fixed-column sticky-column">
+                <div class="flex justify-content-center">
+                    <ng-container *ngFor="let button of item.actionItems;">
+                        <button pButton *ngIf="button.visible !== false" [pTooltip]="button.label | translate"
+                            tooltipPosition="left" class="p-button-sm green-button" [icon]="button.icon"
+                            (click)="onMenuClick($event, item, button)">
+                        </button>
+                    </ng-container>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<p-menu #actions appendTo="body" [popup]="true" [model]="actionItems"
+    styleClass="bg-bluegray-100 w-auto table-actions mt-2">
+    <ng-template pTemplate="item" let-item>
+        <a class="flex align-items-center p-menuitem-link bg-bluegray-100 text-color hover:bg-bluegray-500 hover:text-white"
+            (click)="!item.disabled && (item.routerLink ? navigateTo(item.routerLink) : item.command)">
+            <span [class]="item.icon"></span>
+            <span class="ml-4">
+                {{ item.label | translate }}
+            </span>
+        </a>
+    </ng-template>
+</p-menu>

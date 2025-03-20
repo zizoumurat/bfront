@@ -1,0 +1,44 @@
+:host ::ng-deep .default-table {
+    border-color: transparent;
+
+    tr {
+        .participant {
+            color: #ff6f43;
+            background-color: rgba(255, 111, 67, 0.3333333333);
+            cursor: default;
+        }
+
+        .arrangement {
+            color: #7e9fcd;
+            background-color: rgba(198, 212, 228);
+            cursor: default;
+        }
+
+        .total {
+            color: #236b51;
+            background-color: #aeddcc;
+            cursor: default;
+        }
+
+        .average {
+            color: #968364;
+            background-color: rgba(252, 234, 214, 255);
+            cursor: default;
+        }
+    }
+
+    th {
+        min-width: 0;
+        width: 25%;
+    }
+
+    td {
+        border: 1px solid #ccc;
+        border-top: 0;
+        border-right: 0;
+
+        &:last-child {
+            border-right: 1px solid #ccc;
+        }
+    }
+}

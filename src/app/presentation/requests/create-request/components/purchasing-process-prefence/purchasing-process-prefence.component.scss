@@ -1,0 +1,42 @@
+.card {
+    .box {
+        img {
+            opacity: 0.6;
+            transition: all 0.3s;
+        }
+
+        &.blue-box {
+            background-color: #4791ff10;
+            height: 250px;
+        }
+
+        &.red-box {
+            background-color: #f9d4e334;
+            height: 250px;
+        }
+    }
+
+
+    cursor: pointer;
+
+    button {
+        height: 50px;
+    }
+
+    &:hover {
+        button {
+            color: #fff;
+            background-color: #33d5ac;
+
+            i {
+                color: #fff !important;
+            }
+        }
+
+        .box {
+            img {
+                opacity: 1;
+            }
+        }
+    }
+}

@@ -1,0 +1,109 @@
+<svg class="page-icon" width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"
+    stroke-width="3" stroke="#000000" fill="none">
+    <path
+        d="M37.34,7.36a.12.12,0,0,1,.18.13c-.47,1.86-2.78,12.63,5.57,19.62,8.16,6.84,8.41,17.13,2.33,24-7.27,8.23-19.84,6.78-25.25,1.37C16.36,48.69,9.44,36.33,21.29,26a.1.1,0,0,1,.16,0c.29,1.23,2.3,9,7.66,10,.25,0,.37-.11.25-.34C27.78,32.6,20.66,17,37.34,7.36Z"
+        stroke-linecap="round" />
+</svg>
+
+<div *ngIf="request">
+    <div class="grid">
+        <div class="col-12 lg:col-6">
+            <app-offer-summary *ngIf="summaryTable" [offerSummary]="summaryTable"></app-offer-summary>
+        </div>
+
+        <div class="col-12 lg:col-6 xl:col-5 xl:col-offset-1">
+            <app-info-box [request]="request"></app-info-box>
+        </div>
+    </div>
+
+    <div class="grid mt-4">
+        <div class="col-12">
+            <div class="flex">
+                <button pButton *ngFor="let button of filterButtons; let i = index" pButton class="p-button-sm mr-2"
+                    [ngClass]="{
+                        'bg-orange-400 border-orange-400': activeFilter === i,
+                        'bg-orange-200 border-orange-200': activeFilter !== i
+                    }" [label]="button" (click)="applyFilter(i)"></button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="request" class="grid nested-grid mt-4 align-items-end">
+        <div class="col-12 md:col-5 lg:col-3">
+            <app-template-table [template]="request.template"></app-template-table>
+        </div>
+        <div class="col-12 md:col-7 lg:col-9">
+            <app-offer-box-list *ngIf="offers" [request]="request" [offerList]="filteredOffers"
+                (offerChanged)="offerChange()"></app-offer-box-list>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 flex justify-content-end">
+    <button pButton class="green-button" (click)="displayCreateReverseAuction = true">{{ 'startReverseAuction' |
+        translate }}</button>
+</div>
+
+<div *ngIf="request" class="grid formgrid mt-4">
+    <div class="col-12 md:col-6">
+        <div>
+            <label>{{ 'technicalEvaluation' | translate }}</label>
+            <textarea class="w-full" rows="4" pInputTextarea [(ngModel)]="request.technicalEvaluation"></textarea>
+        </div>
+        <div class="mt-3">
+            <label>{{ 'commercialEvaluation' | translate }}</label>
+            <textarea class="w-full" rows="4" pInputTextarea [(ngModel)]="request.commercialEvaluation"></textarea>
+        </div>
+    </div>
+    <div class="col-12 md:col-6">
+        <div class="flex justify-content-end align-items-end h-full">
+            <button pButton class="bluegray-button mr-3" (click)="allocation()">
+                {{ 'allocation' | translate }}</button>
+            <button pButton class="bg-orange-400 border-orange-400 text-white hover:bg-orange-700">
+                {{ 'completeComparisonTable' | translate }}</button>
+        </div>
+    </div>
+</div>
+
+<p-dialog [header]="'createReverseAuctionSession' | translate" [modal]="true" [(visible)]="displayCreateReverseAuction"
+    [style]="{ width: '70rem' }" styleClass="form-modal">
+    <form *ngIf="reverseAuctionSessionForm" [formGroup]="reverseAuctionSessionForm">
+        <div class="formgrid grid">
+            <div class="field col-12 md:col-3">
+                <label>{{ 'sessionDate' | translate }}</label>
+                <p-calendar appendTo="body" class="three-side-input" styleClass="w-full" [showIcon]="true"
+                    formControlName="sessionDate" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+            <div class="field col-6 md:col-2">
+                <label>{{ 'startTime' | translate }}</label>
+                <p-calendar appendTo="body" [timeOnly]="true" [stepMinute]="10" [hourFormat]="24"
+                    formControlName="startTime" [ngClass]="{
+                        'is-invalid': reverseAuctionSessionForm.get('startTime')?.invalid && (reverseAuctionSessionForm.get('startTime')?.touched || reverseAuctionSessionForm.get('startTime')?.dirty)
+                      }"></p-calendar>
+            </div>
+            <div class=" field col-6 md:col-2">
+                    <label>{{ 'endTime' | translate }}</label>
+                    <p-calendar appendTo="body" [timeOnly]="true" [stepMinute]="10" [hourFormat]="24"
+                        formControlName="endTime"></p-calendar>
+            </div>
+
+            <div class="field col-12 md:col-5">
+                <label>{{ 'meetingUrl' | translate }}</label>
+                <input pInputText class="w-full" formControlName="meetLink" />
+            </div>
+
+            <div class="col-8">
+                <app-offer-selection *ngIf="summaryTable" [offerSummary]="summaryTable"></app-offer-selection>
+            </div>
+            <div class="col-4">
+                <app-session-parameters [formGroup]="reverseAuctionSessionForm"></app-session-parameters>
+            </div>
+        </div>
+        <div class="flex mt-3 justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayCreateReverseAuction = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!reverseAuctionSessionForm.valid"
+                class="green-button w-8rem" (click)="saveReverseAuctionSession()"></button>
+        </div>
+    </form>
+</p-dialog>

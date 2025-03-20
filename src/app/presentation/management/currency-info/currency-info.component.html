@@ -1,0 +1,58 @@
+<i class="pi pi-chart-bar page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (selectChange)="onSelectChange($event)"
+    (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+
+<div class="flex justify-content-end mb-3">
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addCurrencyInfo' | translate"
+        (click)="handleAdd()"></button>
+</div>
+
+<app-table #table dataKey="tblCurrencyParameters" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject" [dataEnrichmentFn]="enrichCurrencyData"></app-table>
+
+<p-dialog [header]="!selected ? 'Yeni Döviz Kuru Ekle' : 'Döviz Kuru Düzenle'" [modal]="true" [(visible)]="displayForm"
+    [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12 xl:col-6">
+                <label>{{'Döviz Birimi 1' | translate }}</label>
+                <p-dropdown styleClass="w-full" appendTo="body" formControlName="currency1Id" [options]="currencyList"
+                   ></p-dropdown>
+                <app-error-message [control]="form.get('currency1Id')"></app-error-message>
+            </div>
+            <div class="field col-12 xl:col-6">
+                <label>{{'Döviz Birimi 2' | translate }}</label>
+                <p-dropdown styleClass="w-full" appendTo="body" formControlName="currency2Id" [options]="currencyList"
+                    (onChange)="getLiveCurrency()"></p-dropdown>
+                <app-error-message [control]="form.get('currency2Id')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>{{'Kur Oranı' | translate}}</label>
+                <input pInputText class="w-full" formControlName="exchangeRate" />
+                <app-error-message [control]="form.get('exchangeRate')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>{{'Anlık Kur Oranı' | translate}}</label>
+                <input pInputText class="w-full" formControlName="liveExchange" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>{{'Başlangıç Tarihi' | translate}}</label>
+                <p-calendar class="three-side-input" appendTo="body" styleClass="w-full" [showIcon]="true" formControlName="startDate"
+                    dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>{{'Bitiş Tarihi' | translate}}</label>
+                <p-calendar class="three-side-input" appendTo="body" styleClass="w-full" [showIcon]="true" formControlName="expiredDate"
+                    dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

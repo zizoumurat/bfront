@@ -1,0 +1,86 @@
+<i class="pi pi-users page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+<div class="flex justify-content-end mb-3">
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addUser' | translate"
+        (click)="handleAdd()"></button>
+</div>
+
+<app-table #table dataKey="tblUsers" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="!selected ? 'Yeni Kullanıcı Ekle' : 'Kullanıcı Düzenle'" [modal]="true" [(visible)]="displayForm"
+    [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12 md:col-6">
+                <label>{{'name' | translate}}</label>
+                <input pInputText class="w-full" formControlName="name" />
+                <app-error-message [control]="form.get('name')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>{{'surName' | translate}}</label>
+                <input pInputText class="w-full" formControlName="surname" />
+                <app-error-message [control]="form.get('surname')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>{{'businessTitle' | translate}}</label>
+                <input pInputText class="w-full" formControlName="title" />
+                <app-error-message [control]="form.get('title')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>{{'email' | translate}}</label>
+                <input pInputText class="w-full" formControlName="email" />
+                <app-error-message [control]="form.get('email')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>{{'phone' | translate}}</label>
+                <p-inputMask mask="(999) 999 99 99" formControlName="phoneNumber" styleClass="w-full" />
+                <app-error-message [control]="form.get('phoneNumber')"></app-error-message>
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label>{{'role' | translate }}</label>
+                <p-dropdown styleClass="w-full" formControlName="roleId" [options]="roleList" optionLabel="name"
+                    optionValue="id"></p-dropdown>
+                <app-error-message [control]="form.get('roleId')"></app-error-message>
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label>{{'department' | translate }}</label>
+                <p-dropdown styleClass="w-full" formControlName="departmentId" [options]="departmentList"
+                   ></p-dropdown>
+                <app-error-message [control]="form.get('departmentId')"></app-error-message>
+            </div>
+            <div *ngIf="!selected" class="field col-12 md:col-6">
+                <label class="w-full">{{ "password" | translate }}</label>
+                <p-password formControlName="password" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full"
+                    autocomplete="new-password"></p-password>
+                <app-error-message [control]="form.get('password')"></app-error-message>
+                <small class="p-error block position-absolute"
+                    *ngIf="form.hasError('mismatch') && form.get('rePassword')?.touched && !form.get('password')?.errors">
+                    <span>
+                        {{ 'passwordsDoNotMatch' | translate}}
+                    </span>
+                </small>
+            </div>
+            <div *ngIf="!selected" class="field col-12 md:col-6">
+                <label class="w-full">{{ "rePassword" | translate }}</label>
+                <p-password formControlName="rePassword" [toggleMask]="true" styleClass="w-full"
+                    inputStyleClass="w-full" autocomplete="new-password"></p-password>
+                <app-error-message [control]="form.get('rePassword')"></app-error-message>
+                <small class="p-error block position-absolute"
+                    *ngIf="form.hasError('mismatch') && form.get('password')?.touched && !form.get('rePassword')?.errors">
+                    <span>
+                        {{ 'passwordsDoNotMatch' | translate}}
+                    </span>
+                </small>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

@@ -1,0 +1,210 @@
+<i class="pi pi-sitemap page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (selectChange)="onSelectChange($event)"
+    (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+
+<app-table #table dataKey="tblAllRequests" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject" (selectedItemsChanged)="selectedItemsChanged($event)"></app-table>
+
+<div class="flex justify-content-end my-4">
+    <button pButton type="button" [disabled]="!selectedRow" (click)="showSetScore()" label="Puan Ver"
+        class="orange-button"></button>
+</div>
+
+<div *ngIf="selectedRow" class="row gy-4 mt-4">
+    <p-panel header="{{ 'actionList' | translate }}">
+        <p-table [resizableColumns]="true" class="mt-4" styleClass="p-datatable-gridlines mt-5"
+            [tableStyle]="{ width: '100%' }" [value]="supplierActions">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="participant text-center" pResizableColumn>
+                        {{ "actionType" | translate }}
+                    </th>
+                    <th class="participant text-center" pResizableColumn>
+                        {{ "subject" | translate }}
+                    </th>
+                    <th class="participant text-center" pResizableColumn>
+                        {{ "actionDetail" | translate }}
+                    </th>
+                    <th class="participant text-center" pResizableColumn>
+                        {{ "actionEndDate" | translate }}
+                    </th>
+                    <th class="participant text-center" pResizableColumn>
+                        {{ "actionStatus" | translate }}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-action>
+                <tr>
+                    <td class="text-center">
+                        {{ ('SupplierActionType.' + getSupplierActionTypeKey(action.type)) | translate }}
+                    </td>
+                    <td class="text-center">{{ action.subject }}</td>
+                    <td class="text-center">{{ action.detail }}</td>
+                    <td class="text-center">{{ action.dueDate | date:'dd/MM/yyyy' }}</td>
+                    <td class="text-center">
+                        {{ ('SupplierActionStatus.' + getSupplierActionStatusKey(action.supplierActionStatus)) |
+                        translate }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-panel>
+    <div class="flex my-4">
+        <button pButton type="button" [disabled]="!selectedRow" (click)="handleCreateAction()" label="Aksiyon Tanımla"
+            class="orange-button"></button>
+    </div>
+</div>
+
+<div *ngIf="visibleCustomerDetailsVisible" class="card flex justify-content-center">
+    <p-dialog header="Tedarikçi Detay" [(visible)]="visibleCustomerDetailsVisible" [modal]="true"
+        [style]="{ width: '30vw' }">
+
+        <hr>
+
+        <div class="grid">
+            <div class="col-6">Firma Ünvanı</div>
+            <div class="col-6">{{detail.name}}</div>
+        </div>
+        <div class="grid">
+            <div class="col-6">Buyersoft Tedarikçi Kodu</div>
+            <div class="col-6">{{detail.code}}</div>
+        </div>
+
+        <div class="grid">
+            <div class="col-6">İrtibat Kişisi</div>
+            <div class="col-6">{{detail.contact}}</div>
+        </div>
+
+        <hr>
+
+        <div class="justify-content-center flex font-bold mb-4 mt-4">Banka Bilgileri</div>
+
+        <div class="grid">
+            <div class="col-6">Banka Adı</div>
+            <div class="col-6">{{detail.bankName}}</div>
+        </div>
+        <div class="grid">
+            <div class="col-6">Şube</div>
+            <div class="col-6">{{detail.branchName}}</div>
+        </div>
+        <div class="grid">
+            <div class="col-6">Şube Kodu</div>
+            <div class="col-6">{{detail.branchCode}}</div>
+        </div>
+
+        <div class="grid">
+            <div class="col-6">Hesap No</div>
+            <div class="col-6">{{detail.accountNumber}}</div>
+        </div>
+
+        <div class="grid">
+            <div class="col-6">IBAN</div>
+            <div class="col-6">{{detail.iban}}</div>
+        </div>
+
+        <div class="grid">
+            <div class="col-6">Vergi Dairesi </div>
+            <div class="col-6">{{detail.taxtAdministration}}</div>
+        </div>
+
+        <div class="grid">
+            <div class="col-6">Vergi Numarası</div>
+            <div class="col-6">{{detail.taxNumber}}</div>
+        </div>
+
+        <div class="grid">
+            <div class="col-6">BuyerSoft Puanı </div>
+            <div class="col-6">
+                <div class="flex">
+                    <p-rating  [stars]="5" [cancel]="false"></p-rating>
+    
+                </div>
+            </div>
+        </div>
+
+
+        <div class="grid">
+            <div class="col-6">Tedarikçi Puanı</div>
+            <div class="col-6">
+                <div class="flex">
+                    <p-rating  [stars]="5" [cancel]="false"></p-rating>
+                </div>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<p-dialog header="Puan Ver" [(visible)]="visibleSetScore" [modal]="true" [style]="{ width: '20vw' }">
+    <hr>
+    <div class="text-center mt-2">
+        <span>{{ "quality" | translate }}</span>
+        <div class="mt-1"><p-rating [(ngModel)]="valueQuality" [stars]="5" [cancel]="false"></p-rating></div>
+    </div>
+    <div class="text-center mt-2">
+        <span>{{ "certification" | translate }}</span>
+        <div class="mt-1"><p-rating [(ngModel)]="valueCertification" [stars]="5" [cancel]="false"></p-rating></div>
+    </div>
+    <div class="text-center mt-2">
+        <span>{{ "workerHealth" | translate }}</span>
+        <div class="mt-1"><p-rating [(ngModel)]="valueHealth" [stars]="5" [cancel]="false"></p-rating></div>
+    </div>
+    <div class="text-center mt-2">
+        <span>{{ "complianceEnv" | translate }}</span>
+        <div class="mt-1"><p-rating [(ngModel)]="valueComplianceEnv" [stars]="5" [cancel]="false"></p-rating></div>
+    </div>
+    <div class="text-center mt-2">
+        <span>{{ "complianceEthical" | translate }}</span>
+        <div class="mt-1"><p-rating [(ngModel)]="valueComplianceEth" [stars]="5" [cancel]="false"></p-rating></div>
+    </div>
+    <div class="text-center mt-2">
+        <span>{{ "performanceAction" | translate }}</span>
+        <div class="mt-1"><p-rating [(ngModel)]="valuePerformance" [stars]="5" [cancel]="false"></p-rating></div>
+    </div>
+    <div class="text-center mt-2">
+        <span>{{ "avgUserScore" | translate }}</span>
+        <div class="mt-1"><p-rating [(ngModel)]="valueAvg" [stars]="5" [cancel]="false"></p-rating></div>
+    </div>
+
+    <div class="flex mt-4">
+        <button pButton type="button" (click)="setScore()" [label]="'save'| translate"
+            class="green-button w-full"></button>
+    </div>
+</p-dialog>
+
+<p-dialog *ngIf="actionForm" [header]="'defineAction' | translate" [modal]="true" [(visible)]="visibleCreateAction"
+    [style]="{ width: '35rem' }" styleClass="form-modal">
+    <form [formGroup]="actionForm" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12">
+                <label>{{ 'type' | translate }}</label>
+                <p-dropdown appendTo='body' [options]="actionTypeOptions" styleClass="w-full" formControlName="type"
+                    optionLabel="name" optionValue="id"></p-dropdown>
+                <app-error-message [control]="actionForm.get('type')"></app-error-message>
+            </div>
+            <div class="field col-12">
+                <label>{{ 'subject' | translate }}</label>
+                <input pInputText class="w-full" formControlName="subject" />
+                <app-error-message [control]="actionForm.get('subject')"></app-error-message>
+            </div>
+
+            <div class="field col-12">
+                <label>{{ 'detail' | translate}}</label>
+                <textarea pInputTextarea rows="5" class="w-full" formControlName="detail"></textarea>
+                <app-error-message [control]="actionForm.get('detail')"></app-error-message>
+            </div>
+
+            <div class="field col-12">
+                <label>{{'actionEndDate' | translate}}</label>
+                <p-calendar appendTo="body" class="three-side-input" styleClass="w-full" [showIcon]="true"
+                    formControlName="dueDate" dateFormat="dd/mm/yy"></p-calendar>
+                <app-error-message [control]="actionForm.get('dueDate')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!actionForm.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

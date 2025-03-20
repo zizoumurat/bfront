@@ -1,0 +1,122 @@
+<i class="pi pi-building page-icon"></i>
+
+<div class="grid">
+    <div class="col-12 xl:col-8 xl:col-offset-2">
+        <div class="card text-white panel-header">
+            <div class="card-content">
+                <div class="card-header">
+                    <div class="flex align-items-center justify-content-center">
+                        {{ 'companyInfoUpdate' | translate }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-2">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="grid">
+                        <div class="col-12 lg:col-6">
+                            <button pButton
+                                class="p-button-outlined border-secondary-500 hover:bg-primary-500 hover:text-100"
+                                routerLink="/management/home" icon="pi pi-arrow-left" iconPos="right"
+                                [label]="'backToPanel' | translate">
+                            </button>
+                        </div>
+                        <div class="col-12 lg:col-6">
+                            <div class="flex justify-content-end">
+                                <div class="flex flex-column align-items-center gap-4">
+                                    <label for="fileInput" class="hidden">Upload File</label>
+                                    <input #fileInput id="fileInput" type="file" accept="image/*" class="hidden"
+                                        (change)="onFileChange($event)">
+                                    <div class="image-container">
+                                        <div>
+                                            <img *ngIf="imageUrl" [src]="imageUrl" alt="">
+                                        </div>
+                                    </div>
+                                    <button pButton type="button" class="bluegray-button w-12rem" icon="pi pi-upload"
+                                        [label]="(imageUrl) ? ('changeLogo' | translate) : ('uploadLogo' | translate)"
+                                        (click)="fileInput.click()">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+                        <div class="formgrid grid nested-grid" style="margin-top: -78px;">
+                            <div class="col-12">
+                                <div class="grid mt-0">
+                                    <div class="field col-12 lg:col-6 xl:col-6">
+                                        <label>{{'companyName' | translate}}</label>
+                                        <div class="p-inputgroup">
+                                            <input type="text" formControlName="name" pInputText>
+                                            <span class="p-inputgroup-addon"><i class="pi pi-building"></i></span>
+                                        </div>
+                                        <app-error-message [control]="companyForm.get('name')"></app-error-message>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field col-12 lg:col-6 xl:col-3">
+                                <label>{{'companyPhone' | translate}}</label>
+                                <p-inputMask mask="(999) 999 99 99" formControlName="phone" styleClass="w-full" />
+                                <app-error-message [control]="companyForm.get('phone')"></app-error-message>
+                            </div>
+                            <div class="field col-12 lg:col-6 xl:col-3">
+                                <label>{{'companyMail' | translate}}</label>
+                                <div class="p-inputgroup">
+                                    <input type="email" formControlName="email" pInputText>
+                                    <span class="p-inputgroup-addon"><i class="pi pi-envelope"></i></span>
+                                </div>
+                                <app-error-message [control]="companyForm.get('email')"></app-error-message>
+                            </div>
+                            <div class="field col-12 lg:col-6 xl:col-3">
+                                <label>{{'city' | translate}}</label>
+                                <p-dropdown styleClass="w-full" formControlName="cityId" [options]="cityList"
+                                    (onChange)="cityChange($event)"></p-dropdown>
+                            </div>
+                            <div class="field col-12 lg:col-6 xl:col-3">
+                                <label>{{'district' | translate}}</label>
+                                <p-dropdown styleClass="w-full" formControlName="districtId"
+                                    [options]="districtList"></p-dropdown>
+                                <app-error-message [control]="companyForm.get('districtId')"></app-error-message>
+                            </div>
+                            <div class="field col-12 lg:col-7 xl:col-7">
+                                <label>{{'taxAdministration' | translate}}</label>
+                                <p-dropdown styleClass="w-full" formControlName="taxAdministration"
+                                    [options]="taxOfficeList"></p-dropdown>
+                                <app-error-message [control]="companyForm.get('taxAdministration')"></app-error-message>
+                            </div>
+                            <div class="field col-12 lg:col-5 xl:col-5">
+                                <label>{{'taxNumber' | translate}}</label>
+                                <div class="p-inputgroup">
+                                    <input type="text" formControlName="taxNumber" pInputText>
+                                    <span class="p-inputgroup-addon"><i class="pi pi-wallet"></i></span>
+                                </div>
+                                <app-error-message [control]="companyForm.get('taxNumber')"></app-error-message>
+                            </div>
+                            <div class="field col-12 xl:col-7">
+                                <label>{{'address' | translate}}</label>
+                                <div class="p-inputgroup">
+                                    <textarea class="textEra" rows="4" cols="50" formControlName="address"
+                                        pInputTextarea></textarea>
+                                    <span class="p-inputgroup-addon"><i class="pi pi-map-marker"></i></span>
+                                </div>
+                                <app-error-message [control]="companyForm.get('address')"></app-error-message>
+                            </div>
+                            <div class="field col-12 xl:col-5">
+                                <div class="flex justify-content-end align-items-end h-full">
+                                    <button type="button" pButton class="orange-button mr-2 w-12rem" label="Banka Hesapları"
+                                        icon="pi pi-arrow-right" iconPos="right"
+                                        routerLink="/management/bank-info"></button>
+                                    <button pButton [disabled]="!companyForm.valid" class="green-button w-12rem"
+                                        label="Kaydet" icon="pi pi-save" iconPos="right"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

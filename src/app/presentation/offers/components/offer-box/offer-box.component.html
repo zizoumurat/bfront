@@ -1,0 +1,115 @@
+<div *ngIf="offerModel" class="flex flex-column  align-items-center items-start">
+    <div class="flex flex-column">
+        <div *ngIf="!hideButtons" class="flex justify-content-center">
+            <div class="border-round-lg mb-n-2 apply">
+                <button pButton *ngIf="offer.notes || offer.document" type="button" icon="pi pi-info-circle"
+                    aria-label="Tedarikçi Notları" pTooltip="Tedarikçi Notları" tooltipPosition="top"
+                    class="p-button-text mr-1 p-1 w-auto btn" (click)="showNotes()"></button>
+
+                <button *ngIf="!offerModel.addedToShortList" pButton type="button" icon="pi pi-plus-circle"
+                    pTooltip="Kısa Listeye Ekle" tooltipPosition="top" class="p-button-text mr-1 p-1 w-auto btn"
+                    (click)="addToShortList()"></button>
+
+                <button *ngIf="offerModel.addedToShortList" pButton type="button" icon="pi pi-minus-circle"
+                    pTooltip="Kısa Listeden Çıkart" tooltipPosition="top" class="p-button-text mr-1 p-1 w-auto btn"
+                    (click)="removeToShortList()"></button>
+
+                <button *ngIf="!offerModel.isSelected" pButton type="button" icon="pi pi-star-fill"
+                    pTooltip="Önerilenlere Ekle" tooltipPosition="top" class="p-button-text mr-1 p-1 w-auto btn"
+                    (click)="addToFavorite()"></button>
+
+                <button *ngIf="offerModel.isSelected" pButton type="button" icon="pi pi-star"
+                    pTooltip="Önerilenlerden Çıkart" tooltipPosition="top" class="p-button-text mr-1 p-1 w-auto btn"
+                    (click)="removeToFavorite()"></button>
+
+                <button pButton type="button" icon="pi pi-refresh" aria-label="Revize İste" pTooltip="Revize İste"
+                    tooltipPosition="top" class="p-button-text p-1 w-auto btn" (click)="requestRevision()"></button>
+            </div>
+        </div>
+
+        <div
+            class="px-1 py-3 flex h-5rem align-items-center justify-content-center border-round-md supplier-name apply">
+            <span class="mr-2">{{offerModel.companyName}}</span>
+            <i *ngIf="offerModel.isSelected" class="pi pi-star-fill text-orange-700" pTooltip="Önerilen Tedarikçi"></i>
+        </div>
+    </div>
+
+    <div class="mt-1 p-3 border-round-md w-full apply relative">
+        <i *ngIf="offer.addedToShortList" class="pi pi-bookmark-fill"></i>
+        <ul class="list-none offer-item-list p-0 m-0 text-center">
+            <li>
+                <span>Ortalama Birim Fiyatı</span>
+                <b [innerHTML]="offerModel.averageUnitPrice | formatColumn: currencyEnum : currencyCode"></b>
+            </li>
+            <li><span>Teklif Genel Tutarı</span>
+                <b [innerHTML]="offerModel.totalPrice | formatColumn: currencyEnum : currencyCode"></b>
+            </li>
+            <li>
+                <span>Teklif Vadesi</span>
+                <b>{{offerModel.maturityDays}} {{'day' | translate}}</b>
+            </li>
+            <li>
+                <span>Teklif Tarihi</span>
+                <b>{{ offerModel.offerDate | date: 'dd/MM/yyyy HH:mm' }}</b>
+            </li>
+            <li>
+                <span>{{'expirationDate' | translate}}</span>
+                <b>{{ offerModel.expirationDate | date: 'dd/MM/yyyy' }}</b>
+            </li>
+        </ul>
+    </div>
+
+    <div class="mt-3 w-full table-container">
+        <p-table *ngIf="offer" [value]="offerModel.rows"
+            styleClass="p-datatable-gridlines default-table offer-management-table">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th *ngFor="let column of offerModel.columns" style="width: 150px">
+                        <span>{{ column.title }}</span>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                <tr>
+                    <td *ngFor="let column of offerModel.columns" class="text-center">
+                        <div *ngIf="column.name!=='allocation' || (allocationCreated && !isAllocation)"
+                            class="flex flex-column"
+                            [innerHTML]="item[column.name] | formatColumn: column.type : currencyCode"></div>
+                        <p-inputNumber [(ngModel)]="offer.offerDetails[rowIndex].allocation"
+                            *ngIf="isAllocation && column.name ==='allocation'" mode="decimal" styleClass="w-full"
+                            inputStyleClass="w-full text-center" class="w-full">
+                        </p-inputNumber>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-dialog [header]="'offerNotes' | translate" [(visible)]="visibleOfferNotes" [modal]="true"
+    [style]="{ width: '50rem' }" styleClass="form-modal">
+    <div class="formgrid grid">
+        <div class="col-12">
+            <div class="text-lg font-bold text-bluegray-700">{{offer.notes}}</div>
+        </div>
+        <div class="col-12">
+            <div *ngIf="documentUrl && fileType" class="mt-3">
+                <!-- Resim Dosyaları -->
+                <img *ngIf="fileType.startsWith('image/')" [src]="documentUrl" alt="Document Image" />
+
+                <!-- PDF Dosyaları -->
+                <iframe *ngIf="fileType === 'application/pdf'" [src]="documentUrl" width="100%" height="600px"></iframe>
+
+                <!-- Word (veya Desteklenmeyen Diğer Dosyalar) -->
+                <a *ngIf="fileType !== 'application/pdf' && !fileType.startsWith('image/')" [href]="documentUrl"
+                    download>
+                    İndir: {{ fileType }}
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-content-end gap-2">
+        <button pButton type="button" [label]="'close' | translate" class="orange-button w-8rem"
+            (click)="visibleOfferNotes = false"></button>
+    </div>
+</p-dialog>

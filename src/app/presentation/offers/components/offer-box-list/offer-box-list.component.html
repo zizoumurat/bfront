@@ -1,0 +1,10 @@
+<div class="flex overflow-x-scroll">
+    <div class="mr-2 flex-shrink-0 w-12 md:w-10 lg:w-6 xl:w-4 offer-box" *ngFor="let offer of offerList; let i = index">
+        <app-offer-box *ngIf="!isReverseAuction" [offer]="offer" [hideButtons]="hideButtons" [request]="request"
+            [isAllocation]="isAllocation" [currencyCode]="request.code" (offerChanged)="offerChange()"></app-offer-box>
+
+        <app-reverse-auction-offer-box *ngIf="isReverseAuction" [offer]="offer"
+            [request]="request" [showCompanyName]="showCompanyName" [currencyCode]="request.code"
+            (priceChange)="onPriceChange($event)"></app-reverse-auction-offer-box>
+    </div>
+</div>

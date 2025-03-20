@@ -1,0 +1,17 @@
+<div *ngIf="uploadedFile; else uploadButton" class="mr-3 flex align-items-center text-lg gap-2">
+    <i [class]="'pi ' + getFileIcon()"></i>
+    <span>{{ uploadedFile?.name }}</span>
+    <button pButton class="bluegray-button" icon="pi pi-trash" (click)="onRemoveFile()"></button>
+</div>
+
+<ng-template #uploadButton>
+    <div class="mr-3">
+        <label for="fileInput" class="hidden">Upload File</label>
+        <input #fileInput id="fileInput" type="file" [accept]="acceptTypes" class="hidden"
+            (change)="onFileSelected($event)">
+
+        <button pButton type="button" class="bluegray-button w-12rem" icon="pi pi-upload"
+            [label]="'fileUpload' | translate" (click)="fileInput.click()">
+        </button>
+    </div>
+</ng-template>

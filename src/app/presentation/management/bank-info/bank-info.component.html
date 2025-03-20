@@ -1,0 +1,62 @@
+<i class="pi pi-map-marker page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (selectChange)="onSelectChange($event)"
+    (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+<div class="flex justify-content-end mb-3">
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addBankAccount' | translate"
+        (click)="handleAdd()"></button>
+</div>
+
+<app-table #table dataKey="tblBankInfos" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="!selected ? 'Yeni Banka Hesabı Ekle' : 'Banka Hesabı Düzenle'" [modal]="true"
+    [(visible)]="displayForm" [style]="{ width: '50rem' }" styleClass="form-modal">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12 lg:col-6">
+                <label>{{'city' | translate }}</label>
+                <p-dropdown appendTo="body" styleClass="w-full" formControlName="cityId" [options]="cityList"
+                    (onChange)="cityChange($event)"></p-dropdown>
+                <app-error-message [control]="form.get('cityId')"></app-error-message>
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label>{{'district' | translate}}</label>
+                <p-dropdown appendTo="body" styleClass="w-full" formControlName="districtId" [options]="districtList"
+                    (onChange)="districtChange($event)"></p-dropdown>
+                <app-error-message [control]="form.get('districtId')"></app-error-message>
+            </div>
+
+            <div class="field col-12 lg:col-12">
+                <label>{{'branch' | translate}}</label>
+                <p-dropdown appendTo="body" styleClass="w-full" formControlName="branchId"
+                    [options]="branchList"></p-dropdown>
+                <app-error-message [control]="form.get('branchId')"></app-error-message>
+            </div>
+
+            <div class="field col-12 lg:col-5">
+                <label>{{'currency' | translate}}</label>
+                <p-dropdown appendTo="body" styleClass="w-full" formControlName="currencyId"
+                    [options]="currencyOptions"></p-dropdown>
+                <app-error-message [control]="form.get('currencyId')"></app-error-message>
+            </div>
+
+            <div class="field col-12 lg:col-7">
+                <label>{{'iban' | translate }}</label>
+                <div class="p-inputgroup w-full">
+                    <span class="p-inputgroup-addon">TR</span>
+                    <p-inputMask mask="99 9999 9999 9999 9999 9999 99" formControlName="iban" styleClass="w-full" class="w-full" />
+                </div>
+                <app-error-message [control]="form.get('iban')"></app-error-message>
+            </div>
+
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

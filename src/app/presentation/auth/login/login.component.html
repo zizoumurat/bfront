@@ -1,0 +1,100 @@
+<div *ngIf="(isLoading | async)" class="loading-bar">
+    <p-progressBar mode="indeterminate" [style]="{ height: '6px' }" />
+</div>
+<div [ngClass]="{'fade-in': !(isLoading | async)}" class="hide-content surface-100 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="grid w-11 xl:w-7 lg:w-10 overflow-hidden grid-nogutter align-items-stretch border-round-3xl bg-white shadow-8">
+        <!-- Left Column (Image with Skeleton) -->
+        <div class="col-7 hidden md:block">
+            <div class="flex flex-column align-items-center justify-content-center h-full image-container">
+                <div *ngIf="!imageLoaded" class="skeleton-container">
+                    <p-skeleton width="20rem" height="2rem" borderRadius="16px" />
+                </div>
+                <!-- Image, shown once loaded -->
+                <img src="assets/layout/images/eticaret.png" alt="Buyersoft" (load)="onImageLoad()"
+                    [ngClass]="{'opacity-0': !imageLoaded, 'opacity-1': imageLoaded}"
+                    class="w-full h-full object-cover" />
+            </div>
+        </div>
+
+        <!-- Right Column (Login Form) -->
+        <div class="col-12 md:col-5">
+            <div class="flex flex-column align-items-start justify-content-center h-full">
+                <div class="w-full">
+                    <div class="w-full surface-card py-2 px-4">
+                        <div class="text-center mb-3">
+                            <img src="assets/layout/images/logo-dark.png" class="w-7rem" alt="">
+                        </div>
+                        <div class="text-center mb-3">
+                            <div class="text-900 text-3xl font-medium mb-1">Hoş Geldiniz.</div>
+                            <span class="text-600 font-medium">Devam etmek için oturum açın</span>
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-900 text-xl font-medium mb-2">{{'email' |
+                                translate}}</label>
+                            <input id="email" type="email" [(ngModel)]="email" pInputText class="w-full mb-5"
+                                style="padding:1rem">
+
+                            <label for="password" class="block text-900 font-medium text-xl mb-2">{{'password' | translate}}</label>
+                            <p-password id="password" [(ngModel)]="password" [toggleMask]="true"
+                                styleClass="mb-5 w-full" inputStyleClass="w-full p-3"></p-password>
+
+                            <div class="flex align-items-center justify-content-between mb-5 gap-5">
+                                <div class="flex align-items-center">
+                                    <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2"></p-checkbox>
+                                    <label for="rememberme">{{'rememberMe' | translate}}</label>
+                                </div>
+
+                                <button pButton type="button" label="{{'forgotPassword' | translate}} ?"
+                                    class="p-button-text text-primary-800" (click)="showForgotPasswordForm()"></button>
+                            </div>
+                            <button pButton pRipple label="Giriş Yap" class="green-button w-full"
+                                (click)="onLogin()"></button>
+
+                            <div class="flex justify-content-end mt-3">
+                                <p-button styleClass="text-md text-left" label="Tedarikçi Kayıt Formu" iconPos="right"
+                                    icon="pi pi-arrow-right" [link]="true" [routerLink]="['/auth/register-supplier']" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog [header]="'forgotPassword' | translate" [modal]="true" [(visible)]="displayForgotPasswordForm"
+    [style]="{ width: '34rem' }" styleClass="form-modal">
+
+    <div *ngIf="!forgotPasswordMailSended">
+        <p-message *ngIf="forgotPasswordErrorMessage" [text]="forgotPasswordErrorMessage"
+            styleClass="p-mr-2 mb-4 w-full bg-red-100 text-red-800 justify-content-start"></p-message>
+        <span class="text-bluegray-800 block mb-5">Şifrenizi sıfırlamak için e-postanıza bir şifre sıfırlama bağlantısı
+            gönderilecektir. Birkaç dakika içinde bir e-posta almazsanız lütfen tekrar deneyin.</span>
+        <form *ngIf="forgotPasswordForm" [formGroup]="forgotPasswordForm" (ngSubmit)="onForgotPassowrdSubmit()">
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-12">
+                    <label>{{'email' | translate}}</label>
+                    <input pInputText class="w-full" formControlName="email" />
+                    <app-error-message [control]="forgotPasswordForm.get('email')"></app-error-message>
+                </div>
+            </div>
+            <div class="flex justify-content-end gap-2">
+                <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-10rem"
+                    (click)="displayForgotPasswordForm = false"></button>
+                <button pButton icon="pi pi-send" [label]="'submit'| translate" type="submit"
+                    [disabled]="!forgotPasswordForm.valid" class="green-button w-10rem"></button>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="forgotPasswordMailSended">
+        <p-message [text]="'passwordResetLinkSent' | translate"
+            styleClass="p-mr-2 mb-4 w-full bg-primary-500 text-primary-900 justify-content-start"
+            severity="success"></p-message>
+
+        <div class="flex justify-content-end">
+            <button pButton class="green-button" [label]="'ok' | translate"
+                (click)="displayForgotPasswordForm = false"></button>
+        </div>
+    </div>
+</p-dialog>

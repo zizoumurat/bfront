@@ -1,0 +1,42 @@
+<p-panel [header]="'allRequests' | translate" collapseIcon="pi pi-arrow-down" expandIcon="pi pi-arrow-up"
+    [toggleable]="true" styleClass="filter-panel mb-3">
+    <div class="grid">
+        <div class="field col-12 md:col-3">
+            <label>{{ 'requestTitle' | translate }}</label>
+            <input pInputText class="w-full">
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>{{ 'requestOwner' | translate }}</label>
+            <p-dropdown styleClass="w-full" optionLabel="name"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>{{ 'requestLocation' | translate }}</label>
+            <p-dropdown styleClass="w-full" optionLabel="name"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>{{ 'currencyUnit' | translate }}</label>
+            <p-dropdown styleClass="w-full" optionLabel="name"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>{{ 'requestAmount' | translate }}</label>
+            <p-inputNumber mode="currency" currency="TRY" locale="tr-TR" class="w-full" styleClass="w-full"
+                inputStyleClass="w-full"></p-inputNumber>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>{{ 'budgetInclusionStatus' | translate }}</label>
+            <p-dropdown styleClass="w-full" optionLabel="name"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>{{ 'requestApprovalStatus' | translate }}</label>
+            <p-dropdown styleClass="w-full" optionLabel="name"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>{{ 'supplyStatus' | translate }}</label>
+            <p-dropdown styleClass="w-full" optionLabel="name"></p-dropdown>
+        </div>
+    </div>
+</p-panel>
+
+
+<app-table #table dataKey="tblAllRequests" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>

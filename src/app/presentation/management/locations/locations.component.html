@@ -1,0 +1,50 @@
+<i class="pi pi-map-marker page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (selectChange)="onSelectChange($event)"
+    (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+<div class="flex justify-content-end mb-3">
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addLocation' | translate"
+        (click)="handleAdd()"></button>
+</div>
+
+<app-table #table dataKey="tblLocations" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="!selected ? 'Yeni Lokasyon Ekle' : 'Lokasyon Düzenle'" [modal]="true" [(visible)]="displayForm"
+    [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12 xl:col-8">
+                <label>{{'locationName' | translate }}</label>
+                <input pInputText class="w-full" formControlName="name" />
+                <app-error-message [control]="form.get('name')"></app-error-message>
+            </div>
+            <div class="col-12 seperator"></div>
+            <div class="field col-12 xl:col-6">
+                <label>{{'city' | translate }}</label>
+                <p-dropdown appendTo="body" styleClass="w-full" formControlName="cityId" [options]="cityList"
+                    (onChange)="cityChange($event)"></p-dropdown>
+                <app-error-message [control]="form.get('cityId')"></app-error-message>
+            </div>
+            <div class="field col-12 xl:col-6">
+                <label>{{'district' | translate}}</label>
+                <p-dropdown appendTo="body" styleClass="w-full" formControlName="districtId"
+                    [options]="districtList"></p-dropdown>
+                <app-error-message [control]="form.get('districtId')"></app-error-message>
+            </div>
+
+            <div class="field col-12 xl:col-12">
+                <label>{{'address' | translate}}</label>
+                <textarea rows="4" formControlName="address" pInputTextarea class="w-full"></textarea>
+                <app-error-message [control]="form.get('address')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

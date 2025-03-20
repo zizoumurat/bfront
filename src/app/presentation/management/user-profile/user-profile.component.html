@@ -1,0 +1,133 @@
+<div class="grid nested-grid">
+    <div class="col-12 lg:col-7 xl:col-5 xl:col-offset-2">
+        <div class="card text-white panel-header">
+            <div class="card-content">
+                <div class="card-header">
+                    <div class="flex align-items-center justify-content-center">
+                        {{ 'personalInfoUpdate' | translate }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow-2">
+            <div class="card-content">
+                <div class="card-body">
+                    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                        <div class="formgrid grid">
+                            <div class="col-12 lg:col-12 mb-4">
+                                <div class="flex flex-column justify-content-center align-items-center gap-4">
+                                    <label for="fileInput" class="hidden">Upload File</label>
+                                    <input #fileInput id="fileInput" type="file" accept="image/*" class="hidden"
+                                        (change)="onFileChange($event)">
+                                    <div class="image-container">
+                                        <div>
+                                            <img *ngIf="imageUrl" [src]="imageUrl" alt="">
+                                        </div>
+                                    </div>
+                                    <button pButton type="button" class="bluegray-button w-16rem" icon="pi pi-upload"
+                                        [label]="(imageUrl) ? ('changePhoto' | translate) : ('uploadPhoto' | translate)"
+                                        (click)="fileInput.click()">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="field col-12 xl:col-6">
+                                <label>{{'name' | translate}}</label>
+                                <input type="text" styleClass="w-full" class="w-full" pInputText
+                                    formControlName="name" />
+                                <app-error-message [control]="userForm.get('name')"></app-error-message>
+                            </div>
+                            <div class="field col-12 xl:col-6">
+                                <label>{{'surname' | translate}}</label>
+                                <input type="text" styleClass="w-full" class="w-full" pInputText
+                                    formControlName="surname" />
+                                <app-error-message [control]="userForm.get('surname')"></app-error-message>
+                            </div>
+                            <div class="field col-12 xl:col-6">
+                                <label>{{'email' | translate}}</label>
+                                <input type="text" styleClass="w-full" class="w-full" pInputText
+                                    formControlName="email" />
+                                <app-error-message [control]="userForm.get('email')"></app-error-message>
+                            </div>
+                            <div class="field col-12 xl:col-6">
+                                <label>{{'phone' | translate}}</label>
+                                <p-inputMask mask="(999) 999 99 99" formControlName="phoneNumber" styleClass="w-full" />
+                                <app-error-message [control]="userForm.get('phoneNumber')"></app-error-message>
+                            </div>
+                            <div class="field col-12 xl:col-6">
+                                <label>{{'businessTitle' | translate}}</label>
+                                <input type="text" styleClass="w-full" class="w-full" pInputText
+                                    formControlName="title" />
+                                <app-error-message [control]="userForm.get('title')"></app-error-message>
+                            </div>
+                            <div class="field col-12 xl:col-6">
+                                <label>{{'language' | translate}}</label>
+                                <p-dropdown styleClass="w-full" formControlName="choosenLanguage"
+                                    [options]="languageOptions"></p-dropdown>
+                                <app-error-message [control]="userForm.get('choosenLanguage')"></app-error-message>
+                            </div>
+                            <div class="field col-12">
+                                <div class="flex justify-content-center align-items-end h-full">
+                                    <button pButton [disabled]="!userForm.valid" class="green-button w-12rem"
+                                        label="Kaydet" icon="pi pi-save" iconPos="right"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 lg:col-5 xl:col-3">
+        <div class="card text-white panel-header">
+            <div class="card-content">
+                <div class="card-header">
+                    <div class="flex align-items-center justify-content-center">
+                        {{ 'passwordUpdate' | translate }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow-2">
+            <div class="card-content">
+                <div class="card-body">
+                    <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
+                        <div class="formgrid grid">
+                            <div class="field col-12 xl:col-12">
+                                <label>{{'oldPassword' | translate}}</label>
+                                <p-password formControlName="password" [toggleMask]="true" styleClass="w-full"
+                                    inputStyleClass="w-full" autocomplete="new-password"></p-password>
+                                <app-error-message [control]="passwordForm.get('password')"></app-error-message>
+                            </div>
+
+                            <div class="field col-12 xl:col-12">
+                                <label>{{'newPassword' | translate}}</label>
+                                <p-password formControlName="newPassword" [toggleMask]="true" styleClass="w-full"
+                                    inputStyleClass="w-full" autocomplete="new-password"></p-password>
+                                <app-error-message [control]="passwordForm.get('newPassword')"></app-error-message>
+                                <small class="p-error block position-absolute"
+                                *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('reNewPassword')?.touched && !passwordForm.get('newPassword')?.errors">
+                                <span>
+                                    {{ 'passwordsDoNotMatch' | translate}}
+                                </span>
+                            </small>
+                            </div>
+
+                            <div class="field col-12 xl:col-12">
+                                <label>{{'reNewPassword' | translate}}</label>
+                                <p-password formControlName="reNewPassword" [toggleMask]="true" styleClass="w-full"
+                                    inputStyleClass="w-full" autocomplete="new-password"></p-password>
+                                <app-error-message [control]="passwordForm.get('reNewPassword')"></app-error-message>
+                            </div>
+                            <div class="field col-12">
+                                <div class="flex justify-content-center align-items-end h-full">
+                                    <button pButton [disabled]="!passwordForm.valid" class="green-button w-12rem"
+                                        label="Kaydet" icon="pi pi-save" iconPos="right"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

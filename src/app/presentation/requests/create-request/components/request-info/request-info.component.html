@@ -1,0 +1,76 @@
+<form *ngIf="requestForm" [formGroup]="requestForm">
+    <div class="formgrid grid">
+        <div class="field col-12 lg:col-6 xl:col-4">
+            <label>Talep Başlığı</label>
+            <p-dropdown styleClass="w-full" [options]="budgetOptions" formControlName="budgetId"></p-dropdown>
+        </div>
+        <div class="field col-12 lg:col-6 xl:col-4" [ngClass]="{'pointer-events-none opacity-50': !showCustomSubject}">
+            <label>Yeni Talep Başlığı</label>
+            <input pInputText formControlName="title" class="w-full" />
+            <app-error-message [control]="requestForm.get('name')"></app-error-message>
+        </div>
+        <div class="field col-12 lg:col-6 xl:col-4">
+            <label>Teklif Toplama Kanalı</label>
+            <p-dropdown styleClass="w-full" formControlName="collectionChannel" [options]="channelOptions"></p-dropdown>
+            <app-error-message [control]="requestForm.get('collectionChannel')"></app-error-message>
+        </div>
+        <div class="field col-12 lg:col-6 xl:col-4">
+            <label class="block">Talep Tutarı</label>
+            <p-inputNumber mode="currency" currency="TRY" id="customSubject" formControlName="amount" locale="tr-TR"
+                class="w-full" styleClass="w-full" inputStyleClass="w-full"></p-inputNumber>
+            <app-error-message [control]="requestForm.get('amount')"></app-error-message>
+        </div>
+        <div class="field col-12 lg:col-4 xl:col-4">
+            <label class="block">Talep Döviz Birimi</label>
+            <p-dropdown styleClass="w-full" [options]="currencyOptions" formControlName="currencyId"></p-dropdown>
+            <app-error-message [control]="requestForm.get('currencyId')"></app-error-message>
+        </div>
+        <div class="field col-12 lg:col-8 xl:col-4">
+            <label for="" class="block">Bütçeye Dahil Olma Durumu</label>
+            <p-selectButton formControlName="budgetInclusionStatus" [options]="budgetInclusionOptions"
+                class="budgetStatusButton"></p-selectButton>
+            <app-error-message [control]="requestForm.get('budgetInclusionStatus')"></app-error-message>
+        </div>
+        <div class="field col-12 lg:col-6 xl:col-4">
+            <label class="block">Ana Kategori</label>
+            <p-dropdown styleClass="w-full" [options]="mainCategoryOptions"
+                formControlName="mainCategoryId"></p-dropdown>
+            <app-error-message [control]="requestForm.get('mainCategoryId')"></app-error-message>
+        </div>
+        <div class="field col-12 lg:col-6 xl:col-4">
+            <label class="block">Alt Kategori</label>
+            <p-dropdown styleClass="w-full" [options]="companySubCategoryList" formControlName="subCategoryId"></p-dropdown>
+            <app-error-message [control]="requestForm.get('subCategoryId')"></app-error-message>
+        </div>
+        <div class="field col-12 lg:col-6 xl:col-4">
+            <label class="block">Talep Grubu</label>
+            <p-dropdown styleClass="w-full" [options]="companyRequestGroupList"
+                formControlName="requestGroupId"></p-dropdown>
+            <app-error-message [control]="requestForm.get('requestGroupId')"></app-error-message>
+        </div>
+        <div class="field col-12  lg:col-6 xl:col-6">
+            <label class="block">Talep Nedeni</label>
+            <div>
+                <textarea pInputTextarea type="text" class="w-full" styleClass="xs" formControlName="reason"
+                    rows="4"></textarea>
+            </div>
+            <app-error-message [control]="requestForm.get('reason')"></app-error-message>
+        </div>
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="field w-full">
+                <label class="block">Talep Edilen Tedarik Tarihi</label>
+                <p-calendar class="three-side-input" styleClass="w-full" [showIcon]="true"
+                    formControlName="requestedSupplyDate" dateFormat="dd/mm/yy"></p-calendar>
+                <app-error-message [control]="requestForm.get('requestedSupplyDate')"></app-error-message>
+            </div>
+        </div>
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="field">
+                <label class="block">Tahmin Edilen Tedarik Tarihi</label>
+                <p-calendar class="three-side-input" styleClass="w-full" [showIcon]="true"
+                    formControlName="estimatedSupplyDate" dateFormat="dd/mm/yy"></p-calendar>
+                <app-error-message [control]="requestForm.get('estimatedSupplyDate')"></app-error-message>
+            </div>
+        </div>
+    </div>
+</form>

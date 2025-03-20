@@ -1,0 +1,38 @@
+<p-panel [header]="'filterCriteria' | translate" collapseIcon="pi pi-arrow-down" expandIcon="pi pi-arrow-up"
+    [toggleable]="true" styleClass="filter-panel mb-3">
+    <ng-template pTemplate="icons">
+        <button pButton icon="pi pi-filter-slash" (click)="resetFilterForm()" pTooltip="{{ 'clearFilter' | translate }}"
+            tooltipPosition="top" class="orange-button mr-2"></button>
+        <button pButton type="button" icon="pi pi-filter" pTooltip="{{ 'applyFilter' | translate }}"
+            tooltipPosition="top" class="green-button mr-2" (click)="submitFilter()"></button>
+    </ng-template>
+
+    <form [formGroup]="filterForm" (ngSubmit)="submitFilter()">
+        <div class="formgrid grid">
+            <div class="field col-12 lg:col-4 xl:col-3" *ngFor="let field of filterConfig">
+                <label>{{ field.label | translate }}</label>
+                <ng-container [ngSwitch]="field.type">
+                    <ng-container *ngSwitchCase="'text'">
+                        <input *ngIf="!field.addon" type="text" class="w-full" pInputText
+                            [formControlName]="field.controlName">
+                        <div *ngIf="field.addon" class="p-inputgroup">
+                            <p-inputNumber mode="decimal" [useGrouping]="true" [formControlName]="field.controlName"
+                                class="w-full" styleClass="w-full" inputStyleClass="w-full">
+                            </p-inputNumber>
+                            <span class="p-inputgroup-addon"><em>{{field.addon | translate}}</em></span>
+                        </div>
+                    </ng-container>
+                    <p-dropdown *ngSwitchCase="'select'" styleClass="w-full" [formControlName]="field.controlName"
+                        [options]="field.options"
+                        (onChange)="onDropdownChange(field.controlName, $event.value)"></p-dropdown>
+                    <p-inputNumber *ngSwitchCase="'currency'" mode="currency" [currency]="field.currency"
+                        [useGrouping]="false" [useGrouping]="true" [formControlName]="field.controlName" class="w-full" styleClass="w-full"
+                        inputStyleClass="w-full">
+                    </p-inputNumber>
+                    <p-calendar *ngSwitchCase="'date'" class="three-side-input" styleClass="w-full" [showIcon]="true"
+                        [formControlName]="field.controlName" dateFormat="dd/mm/yy"></p-calendar>
+                </ng-container>
+            </div>
+        </div>
+    </form>
+</p-panel>

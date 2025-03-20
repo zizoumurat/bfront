@@ -1,0 +1,39 @@
+:host ::ng-deep .offer-box:nth-child(4n + 1) {
+    .apply {
+        background-color: #aeddcc !important;
+        color: #236b51 !important;
+    }
+
+    button.btn {
+        background-color: #aeddcc !important;
+        color: #236b51 !important;
+    }
+}
+
+
+:host ::ng-deep .offer-box:nth-child(4n + 2) {
+
+    .apply,
+    button.btn {
+        background-color: #e7c2f7 !important;
+        color: #236b51 !important;
+    }
+}
+
+:host ::ng-deep .offer-box:nth-child(4n + 3) {
+
+    .apply,
+    button.btn {
+        background-color: #ddccae !important;
+        color: #236b51 !important;
+    }
+}
+
+:host ::ng-deep .offer-box:nth-child(4n + 4) {
+
+    .apply,
+    button.btn {
+        background-color: #d6ebb4 !important;
+        color: #236b51 !important;
+    }
+}

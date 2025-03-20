@@ -1,0 +1,18 @@
+<div class="grid mt-6">
+    <div class="col-5 col-offset-1" (click)="startComplatePurchaseRequest(1)">
+        <div class="card">
+            <div class="flex justify-content-center box blue-box">
+                <img class="my-4" src="/assets/layout/images/choose-type-1.svg" />
+            </div>
+            <button pButton class="green-button w-full mt-4" [label]="'startPurchaseProcessFromApprovedSuppliers' | translate"  icon="pi pi-building" iconPos="right"></button>
+        </div>
+    </div>
+    <div class="col-5">
+        <div class="card" (click)="startComplatePurchaseRequest(2)">
+            <div class="flex justify-content-center box red-box">
+                <img class="my-4" src="/assets/layout/images/choose-type-2.svg" />
+            </div>
+            <button pButton class="green-button w-full mt-4" [label]="'startRFQQuoteCollectionProcess' | translate"  icon="pi pi-building" iconPos="right"></button>
+        </div>
+    </div>
+</div>

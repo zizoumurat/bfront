@@ -1,0 +1,30 @@
+<i class="pi pi-microsoft page-icon"></i>
+
+<div class="grid">
+    <ng-template ngFor let-panel let-i="index" [ngForOf]="menuItems">
+        <div class="col-12 lg:col-5 xl:col-4 col-offset-1">
+            <div class="card text-white panel-header">
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="flex align-items-center justify-content-center">
+                            {{panel.header | translate}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-content">
+                    <div class="card-body">
+                        <ng-template ngFor let-item let-i="index" [ngForOf]="panel.items">
+                            <button pButton type="button" class="panel-button mb-4 green-button"
+                                icon="pi {{ item.icon }}" iconPos="right"
+                                [routerLink]="['/management', item.routerLink]"
+                                label="{{ item.label | translate }}"></button>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>

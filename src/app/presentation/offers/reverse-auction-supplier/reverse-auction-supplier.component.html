@@ -1,0 +1,41 @@
+<svg class="page-icon" width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"
+    stroke-width="3" stroke="#000000" fill="none">
+    <path
+        d="M37.34,7.36a.12.12,0,0,1,.18.13c-.47,1.86-2.78,12.63,5.57,19.62,8.16,6.84,8.41,17.13,2.33,24-7.27,8.23-19.84,6.78-25.25,1.37C16.36,48.69,9.44,36.33,21.29,26a.1.1,0,0,1,.16,0c.29,1.23,2.3,9,7.66,10,.25,0,.37-.11.25-.34C27.78,32.6,20.66,17,37.34,7.36Z"
+        stroke-linecap="round" />
+</svg>
+
+<div *ngIf="request">
+
+    <div *ngIf="reverseAuction" class="grid">
+        <div *ngIf="reverseAuction.showOfferRankings" class="col-12 lg:col-7 xl:col-5">
+            <app-offer-summary *ngIf="summaryTable" [offerSummary]="summaryTable"></app-offer-summary>
+        </div>
+
+        <div class="col-12 lg:col-5 xl:col-3">
+            <app-count-down-reverse-auction [initialMinutes]="reverseAuction.minutes * 60"></app-count-down-reverse-auction>
+        </div>
+    </div>
+
+    <div class="grid nested-grid mt-4 align-items-end">
+        <div class="col-12 lg:col-3">
+            <app-template-table [showTargetPrices]="true" [template]="request.template"></app-template-table>
+        </div>
+        <div class="col-12 lg:col-9">
+            <app-offer-box-list *ngIf="offers" [isReverseAuction]="true" [request]="request"
+                [offerList]="filteredOffers" [showCompanyName]="reverseAuction.showCompanyNames" (priceChange)="onPriceChange($event)"></app-offer-box-list>
+        </div>
+        <div class="col-12">
+            <div class="flex justify-content-end mb-3">
+                <div *ngIf="reverseAuction && isStatusRestricted(reverseAuction.statu)" class="text-red-500">
+                    {{ getStatusMessage(reverseAuction.statu) }}
+                </div>
+            </div>
+            
+            <div class="flex justify-content-end">
+                <button pButton [disabled]="isDisabled" class="orange-button" iconPos="right" icon="pi pi-angle-right"
+                    label="Teklifi Güncelle" (click)="updateOfferPrice()"></button>
+            </div>
+        </div>
+    </div>
+</div>

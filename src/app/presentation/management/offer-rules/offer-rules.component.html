@@ -1,0 +1,97 @@
+<i class="pi pi-ticket page-icon"></i>
+
+<p-panel [header]="'offerRules' | translate" [toggleable]="true" styleClass="filter-panel mb-3">
+    <ng-template pTemplate="icons">
+        <button pButton icon="pi pi-filter-slash" (click)="resetFilterForm()" pTooltip="{{ 'clearFilter' | translate }}"
+            tooltipPosition="top" class="orange-button mr-2"></button>
+        <button pButton type="button" icon="pi pi-filter" pTooltip="{{ 'applyFilter' | translate }}" tooltipPosition="top"
+            class="green-button mr-2" (click)="submitFilter()"></button>
+    </ng-template>
+
+    <form [formGroup]="filterForm" (ngSubmit)="submitFilter()" (keydown.enter)="onEnter($event)">
+        <div class="formgrid grid nested-grid">
+            <div class="col-5">
+                <div class="text-center">
+                    <h4>{{ 'spendLimit' | translate }}</h4>
+                </div>
+                <div class="grid mt-4">
+                    <div class="field col-12 lg:col-5">
+                        <label>{{ 'minimumValue' | translate }}</label>
+                        <p-inputNumber mode="decimal" [useGrouping]="false" formControlName="spendLimitMin"
+                            class="w-full" styleClass="w-full" inputStyleClass="w-full">
+                        </p-inputNumber>
+                    </div>
+                    <div class="col-2">
+                        <div class="flex align-items-center h-full justify-content-center">
+                            -
+                        </div>
+                    </div>
+                    <div class="field col-12 lg:col-5">
+                        <label>{{ 'maximumValue' | translate }}</label>
+                        <p-inputNumber mode="decimal" [useGrouping]="false" formControlName="spendLimitMax"
+                            class="w-full" styleClass="w-full" inputStyleClass="w-full">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+            <div class="col-5 col-offset-2">
+                <div class="text-center">
+                    <h4>{{ 'offerCount' | translate }}</h4>
+                </div>
+                <div class="grid mt-4">
+                    <div class="field col-12 lg:col-5">
+                        <label>{{ 'minimumOfferCount' | translate }}</label>
+                        <p-inputNumber mode="decimal" [useGrouping]="false" formControlName="offerLimitMin"
+                            class="w-full" styleClass="w-full" inputStyleClass="w-full">
+                        </p-inputNumber>
+                    </div>
+                    <div class="col-2">
+                        <div class="flex align-items-center h-full justify-content-center">
+                            -
+                        </div>
+                    </div>
+                    <div class="field col-12 lg:col-5">
+                        <label>{{ 'maximumOfferCount' | translate }}</label>
+                        <p-inputNumber mode="decimal" [useGrouping]="false" formControlName="offerLimitMax"
+                            class="w-full" styleClass="w-full" inputStyleClass="w-full">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</p-panel>
+
+<div class="flex justify-content-end mb-3">
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addOfferRule' | translate"
+        (click)="handleAdd()"></button>
+</div>
+
+<app-table dataKey="tblOfferRules" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="(!selected ? 'addOfferRule' : 'editOfferRule') | translate" [modal]="true" [(visible)]="displayForm"
+    [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12 xl:col-6">
+                <label>{{ 'spendLimit' | translate }}</label>
+                <p-inputNumber mode="currency" currency="TRY" formControlName="spendLimit"
+                    locale="tr-TR" class="w-full" styleClass="w-full" inputStyleClass="w-full"></p-inputNumber>
+                <app-error-message [control]="form.get('spendLimit')"></app-error-message>
+            </div>
+            <div class="field col-12 xl:col-6">
+                <label>{{ 'minimumOfferCount' | translate }}</label>
+                <p-inputNumber mode="decimal" formControlName="minimumOfferCount"
+                    class="w-full" styleClass="w-full" inputStyleClass="w-full"></p-inputNumber>
+                <app-error-message [control]="form.get('minimumOfferCount')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

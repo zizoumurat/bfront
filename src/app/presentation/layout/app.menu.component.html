@@ -1,0 +1,8 @@
+<ul class="layout-menu">
+    <li class="title">Menü</li>
+    <ng-container *ngFor="let item of model; let i = index;">
+        <li app-menuitem *ngIf="getVisible(item)" [item]="item"
+            [index]="i" [root]="false"></li>
+        <li *ngIf="item.separator" class="menu-separator"></li>
+    </ng-container>
+</ul>

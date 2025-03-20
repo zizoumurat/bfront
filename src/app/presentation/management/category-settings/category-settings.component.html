@@ -1,0 +1,252 @@
+<i class="pi pi-cog page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (selectChange)="onSelectChange($event)"
+    (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+<div class="flex justify-content-end mb-3">
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addCategory' | translate"
+        (click)="handleAdd()"></button>
+    <button pButton class="green-button ml-2" icon="pi pi-upload" [pTooltip]="'importExcell' | translate"
+        tooltipPosition="left" (click)="displayImportExcell = true"></button>
+
+    <button pButton class="green-button ml-2" icon="pi pi-download" [pTooltip]="'exportExcell' | translate"
+        tooltipPosition="left" (click)="exportExcell()"></button>
+</div>
+
+<app-table #categoryTable dataKey="tblCategories" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="(!selected ? 'addCategory' : 'editCategory') | translate" [modal]="true" [(visible)]="displayForm"
+    [style]="{ width: '60rem' }" styleClass="form-modal">
+    <form [formGroup]="form" (ngSubmit)="onSubmitForm()">
+        <div class="formgrid grid">
+            <div class="field col-12 lg:col-6">
+                <label>{{'mainCategory' | translate }}</label>
+                <p-dropdown appendTo="body" styleClass="w-full" formControlName="mainCategoryId"
+                    [options]="mainCategoryList" (onChange)="mainCategoryChange($event)"></p-dropdown>
+                <app-error-message [control]="form.get('mainCategoryId')"></app-error-message>
+            </div>
+            <div class="field col-12 xl:col-12">
+                <div class="flex align-items-end">
+                    <div class="flex-1">
+                        <label>{{ 'subCategory' | translate }}</label>
+                        <p-dropdown appendTo="body" styleClass="w-full" formControlName="subCategoryId"
+                            [options]="companySubCategoryList" (onChange)="subCategoryChange($event)"></p-dropdown>
+                    </div>
+                    <div>
+                        <button pButton (click)="displayAddSubCategory = true" class="green-button ml-2"
+                            label="Yeni Ekle" [disabled]="!form.get('mainCategoryId').value"></button>
+                    </div>
+                </div>
+                <app-error-message [control]="form.get('subCategoryId')"></app-error-message>
+            </div>
+            <div class="field col-12 xl:col-12">
+                <div class="flex align-items-end">
+                    <div class="flex-1">
+                        <label>{{ 'requestGroup' | translate }}</label>
+                        <p-dropdown appendTo="body" styleClass="w-full" formControlName="requestGroupId"
+                            [options]="companyRequestGroupList"></p-dropdown>
+                    </div>
+                    <div>
+                        <button pButton [disabled]="!form.get('subCategoryId').value" class="green-button ml-2"
+                            label="Yeni Ekle" (click)="displayAddRequestGroup = true"></button>
+                    </div>
+                </div>
+                <app-error-message [control]="form.get('requestGroupId')"></app-error-message>
+            </div>
+
+            <div class="field col-12 xl:col-6">
+                <label>{{'ownerUser' | translate }}</label>
+                <p-multiSelect appendTo="body" styleClass="w-full" formControlName="userIdList" optionLabel="name"
+                    optionValue="id" [options]="userList"></p-multiSelect>
+                <app-error-message [control]="form.get('userIdList')"></app-error-message>
+            </div>
+            <div class="field col-12 xl:col-6">
+                <label>{{'requestLocation' | translate }}</label>
+                <p-dropdown appendTo="body" styleClass="w-full" formControlName="locationId"
+                    [options]="locationList"></p-dropdown>
+                <app-error-message [control]="form.get('locationId')"></app-error-message>
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label>{{'leadTime' | translate }}</label>
+                <div class="p-inputgroup">
+                    <p-inputNumber mode="decimal" [useGrouping]="false" formControlName="leadTime" class="w-full"
+                        styleClass="w-full" inputStyleClass="w-full">
+                    </p-inputNumber>
+                    <span class="p-inputgroup-addon"><em>{{'week' | translate}}</em></span>
+                </div>
+            </div>
+            <div class="field col-12 xl:col-6">
+                <label>{{'unit' | translate }}</label>
+                <p-dropdown appendTo="body" styleClass="w-full" [filter]="true" formControlName="unit"
+                    [options]="unitList"></p-dropdown>
+                <app-error-message [control]="form.get('unit')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-between">
+            <p-button *ngIf="displayProductDefinitionButton" styleClass="text-md w-full text-left bluegray-button"
+                label="Ürün Tanımları" icon="pi pi-arrow-right" iconPos="right" (click)="handleProductDefinition()" />
+            <p-button *ngIf="displayServiceDefinitionButton" styleClass="text-md w-full text-left bluegray-button"
+                label="Hizmet Tanımları" icon="pi pi-arrow-right" iconPos="right" (click)="handleServiceDefinition()" />
+            <div class="flex justify-content-end gap-2">
+                <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                    (click)="displayForm = false"></button>
+                <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                    class="green-button w-8rem"></button>
+            </div>
+        </div>
+
+    </form>
+</p-dialog>
+
+<p-dialog [header]="'productDefinitions' | translate" [modal]="true" [(visible)]="displayProductDefinitions"
+    [style]="{ width: '50rem' }" styleClass="form-modal">
+    <div class="flex justify-content-end mb-3">
+        <button pButton class="orange-button" icon="pi pi-plus" [label]="'addProductDefinition' | translate"
+            (click)="handleAddProductDefinition()"></button>
+    </div>
+
+    <app-table #productDefinitionTable dataKey="tblProductDefinitions" [service]="productDefinitionService"
+        [columns]="productDefinitionColumns" [actionItems]="productDefinitionActionItems" rows="5"
+        [searchObject]="searcProductDefinition"></app-table>
+</p-dialog>
+
+<p-dialog [header]="(!selectedProductDefinition ? 'addProductDefinition' : 'editProductDefinition') | translate"
+    [modal]="true" [(visible)]="displayProductDefinitionForm" [style]="{ width: '35rem' }" styleClass="form-modal">
+
+    <form [formGroup]="productDefinitionForm" (ngSubmit)="onSubmitProductDefinitionForm()">
+        <div class="formgrid grid">
+            <div class="field col-12 md:col-6">
+                <label>{{'code' | translate}}</label>
+                <input pInputText class="w-full" formControlName="code" />
+                <app-error-message [control]="productDefinitionForm.get('name')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-12">
+                <label>{{'definition' | translate}}</label>
+                <input pInputText class="w-full" formControlName="definition" />
+                <app-error-message [control]="productDefinitionForm.get('definition')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayProductDefinitionForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!productDefinitionForm.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>
+
+
+<p-dialog [header]="'serviceDefinitions' | translate" [modal]="true" [(visible)]="displayServiceDefinitions"
+    [style]="{ width: '55rem' }" styleClass="form-modal">
+    <div class="flex justify-content-end mb-3">
+        <button pButton class="orange-button" icon="pi pi-plus" [label]="'addServiceDefinition' | translate"
+            (click)="handleAddServiceDefinition()"></button>
+    </div>
+
+    <app-table #serviceDefinitionTable dataKey="tblServiceDefinitions" [service]="serviceDefinitionService"
+        [columns]="serviceDefinitionColumns" [actionItems]="serviceDefinitionActionItems" rows="5"
+        [searchObject]="searcServiceDefinition"></app-table>
+</p-dialog>
+
+<p-dialog [header]="(!selectedServiceDefinition ? 'addServiceDefinition' : 'editServiceDefinition') | translate"
+    [modal]="true" [(visible)]="displayServiceDefinitionForm" [style]="{ width: '35rem' }" styleClass="form-modal">
+
+    <form [formGroup]="serviceDefinitionForm" (ngSubmit)="onSubmitServiceDefinitionForm()">
+        <div class="formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label>{{'definition' | translate}}</label>
+                <input pInputText class="w-full" formControlName="definition" />
+                <app-error-message [control]="serviceDefinitionForm.get('definition')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayServiceDefinitionForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!serviceDefinitionForm.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>
+
+
+<p-dialog [header]="'addSubCategory' | translate" [modal]="true" [(visible)]="displayAddSubCategory"
+    [style]="{ width: '35rem' }" styleClass="form-modal">
+
+    <form [formGroup]="companySubCategoryForm" (ngSubmit)="onSubmitCompanySubCategoryForm()">
+        <div class="formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label>{{'subCategory' | translate}} 1</label>
+                <input pInputText class="w-full" formControlName="name" />
+                <app-error-message [control]="companySubCategoryForm.get('name')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-12">
+                <label>{{'subCategory' | translate}} 2</label>
+                <p-dropdown appendTo="body" styleClass="w-full" [filter]="true" formControlName="subCategoryId"
+                    [options]="subCategoryList"></p-dropdown>
+                <app-error-message [control]="companySubCategoryForm.get('subCategoryId')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayAddSubCategory = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!companySubCategoryForm.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>
+
+<p-dialog [header]="'addRequestGroup' | translate" [modal]="true" [(visible)]="displayAddRequestGroup"
+    [style]="{ width: '35rem' }" styleClass="form-modal">
+
+    <form [formGroup]="companyRequestGroupForm" (ngSubmit)="onSubmitCompanyRequestGroupForm()">
+        <div class="formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label>{{'requestGroup' | translate}} 1</label>
+                <input pInputText class="w-full" formControlName="name" />
+                <app-error-message [control]="companyRequestGroupForm.get('name')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-12">
+                <label>{{'requestGroup' | translate}} 2</label>
+                <p-dropdown appendTo="body" styleClass="w-full" [filter]="true" formControlName="requestGroupId"
+                    [options]="requestGroupList"></p-dropdown>
+                <app-error-message [control]="companyRequestGroupForm.get('requestGroupId')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayAddRequestGroup = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!companyRequestGroupForm.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>
+
+
+<p-dialog [header]="'importExcell' | translate" [modal]="true" [(visible)]="displayImportExcell"
+    [style]="{ width: '35rem' }" styleClass="form-modal">
+    <div>
+        <h3>Dosya Yükleme Kuralları</h3>
+        <ul>
+            <li>Yalnızca <b>Excel (.xlsx)</b> formatındaki dosyalar kabul edilir.</li>
+            <li>Dosya boyutu <b>5 MB</b>'ı aşmamalıdır.</li>
+            <li>Eğer yeni kayıt eklemek istiyorsanız ID alanını boş bırakınız.</li>
+            <li>Kolon silme / ekleme yapılmamalıdır.</li>
+            <li>Kolon başlığı değiştirilmemelidir.</li>
+            <li>Yetkili kullanıcılar "," ile ayrılmalıdır.</li>
+        </ul>
+    </div>
+    <div class="formgrid grid">
+        <div class="field col-12 md:col-12 justify-content-end">
+            <div class="flex justify-content-end">
+                <app-single-file-upload (fileUploaded)="onFileReceived($event)"></app-single-file-upload>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-content-end gap-2">
+        <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+            (click)="displayImportExcell = false"></button>
+        <button pButton [label]="'save'| translate" type="submit" [disabled]="!selectedFile"
+            class="green-button w-8rem" (click)="importExcel()"></button>
+    </div>
+</p-dialog>

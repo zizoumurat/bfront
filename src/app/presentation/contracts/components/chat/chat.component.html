@@ -1,0 +1,16 @@
+<div class="chat">
+  <div #scrollContainer class="messages">
+    <div *ngFor="let message of comments" class="message"
+      [ngClass]="{'send': message.type === 'send', 'received': message.type === 'received'}">
+      <span class="icon">{{message.user[0]}}</span>
+      <span class="text">{{message.comment || message.message}}</span>
+    </div>
+  </div>
+  <input pInputText (keyup.enter)="sendMessage()" type="text" [placeholder]="'sendMessage' | translate"
+    [(ngModel)]="newMessage" class="p-inputtext p-component p-element mb-2" />
+
+  <button (click)="sendMessage()" pbutton="" pripple="" label="Submit"
+    class="p-element p-ripple p-button p-component primary "><span class="p-button-label">{{ 'send' | translate
+      }}</span>
+    <span class="p-ink"></span></button>
+</div>

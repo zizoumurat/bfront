@@ -1,0 +1,97 @@
+<p-toast></p-toast>
+
+<p-confirmDialog #cdError key="errorConfirm" [style]="{ width: '450px' }">
+    <ng-template pTemplate="headless" let-message>
+        <div class="flex flex-column p-5 surface-overlay border-round">
+            <div class="flex justify-content-center">
+                <div
+                    class="border-circle bg-red-500 inline-flex justify-content-center align-items-center h-6rem w-6rem text-white"
+                >
+                    <i class="pi pi-times text-5xl"></i>
+                </div>
+            </div>
+            <div class="flex justify-content-center">
+                <span class="font-bold text-2xl block mb-2 mt-4">
+                    {{ message.header }}
+                </span>
+            </div>
+            <div class="flex justify-content-center">
+                <p class="mb-0">{{ message.message }}</p>
+            </div>
+            <div class="flex justify-content-end mt-4">
+                <button
+                    pButton
+                    label="Kapat"
+                    (click)="cdError.accept()"
+                    class="w-8rem"
+                ></button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #cdDelete key="deleteConfirm">
+    <ng-template pTemplate="headless" let-message>
+        <div
+            class="flex flex-column align-items-center p-5 text-900 bg-bluegray-100 border-round"
+        >
+            <div
+                class="border-circle bg-red-500 text-white inline-flex justify-content-center align-items-center h-6rem w-6rem"
+            >
+                <i class="pi pi-exclamation-circle text-5xl"></i>
+            </div>
+            <span class="font-bold text-2xl block mb-2 mt-4">
+                {{ message.header }}
+            </span>
+            <p class="mb-0">{{ message.message }}</p>
+            <div class="flex align-items-center gap-2 mt-4">
+                <button
+                    pButton
+                    [label]="'giveUp' | translate"
+                    (click)="cdDelete.reject()"
+                    class="green-button w-8rem"
+                ></button>
+                <button
+                    pButton
+                    [label]="'yes' | translate"
+                    (click)="cdDelete.accept()"
+                    class="bg-red-500 border-red-500 text-red-100 hover:bg-red-700 hover:border-red-700 hover:text-white w-8rem"
+                ></button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #cd>
+    <ng-template pTemplate="headless" let-message>
+        <div
+            class="flex flex-column align-items-center p-5 bg-bluegray-100 text-900 border-round max-w-30rem"
+        >
+            <div
+                class="border-circle bg-red-500 text-white inline-flex justify-content-center align-items-center h-6rem w-6rem"
+            >
+                <i class="pi pi-question text-5xl"></i>
+            </div>
+            <span class="font-bold text-2xl block mb-2 mt-4">
+                {{ message.header }}
+            </span>
+            <p class="mb-0">{{ message.message }}</p>
+            <div class="flex align-items-center gap-2 mt-4">
+                <button
+                    pButton
+                    [label]="'giveUp' | translate"
+                    (click)="cd.reject()"
+                    class="bg-red-500 border-red-500 text-red-100 hover:bg-red-700 hover:border-red-700 hover:text-white w-8rem"
+                ></button>
+                <button
+                    pButton
+                    [label]="'yes' | translate"
+                    (click)="cd.accept()"
+                    class="green-button w-8rem"
+                ></button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<router-outlet></router-outlet>
