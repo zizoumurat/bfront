@@ -82,6 +82,7 @@
             <th><span>Tarih</span></th>
             <th><span>Durum</span></th>
             <th><span>Toplam Tutar</span></th>
+            <th></th>
         </tr>
     </ng-template>
 
@@ -99,6 +100,11 @@
             <td>{{ order.orderDate | date:'short' }}</td>
             <td>{{ ('OrderStatusEnum.' + getOrderStatus(order.status)) | translate }} </td>
             <td>{{ order.totalPrice | currency:item.currencyCode }}</td>
+            <td>
+                <button pButton type="button"
+                icon="pi pi-file-pdf" class="p-button-sm green-button" (click)="openPO(order)">
+            </button>
+            </td>
         </tr>
 
         <!-- ALT SATIR: SİPARİŞ KALEMLERİ -->
@@ -218,4 +224,17 @@
         </ng-template>
     </p-table>
 
+</p-dialog>
+
+<p-dialog *ngIf="selectedOrder" [header]="selectedOrder.orderCode" [(visible)]="visiblePO" [modal]="true"
+    [style]="{ width: '50rem' }" styleClass="form-modal">
+    <div class="formgrid grid">
+
+        <iframe *ngIf="documentUrl" [src]="documentUrl" width="100%" height="600px"></iframe>
+
+    </div>
+    <div class="flex justify-content-end gap-2">
+        <button pButton type="button" [label]="'close' | translate" class="orange-button w-8rem"
+            (click)="visiblePO = false"></button>
+    </div>
 </p-dialog>

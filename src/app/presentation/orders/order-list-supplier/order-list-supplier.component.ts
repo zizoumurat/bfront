@@ -11,10 +11,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ListItemModel } from 'src/app/core/domain/listItem.model';
 import { IOrderPreparationService } from 'src/app/core/services/i.orderPreparation.service';
 import { ORDERPREPARATION_SERVICE } from 'src/app/service/orderPreparationService';
-import { NonconformityReasonEnum, OrderStatusEnum } from 'src/app/core/domain/orderPreparation.model';
+import { NonconformityReasonEnum, OrderListModel, OrderStatusEnum } from 'src/app/core/domain/orderPreparation.model';
 import { ORDER_SERVICE } from 'src/app/service/orderService';
 import { IOrderService } from 'src/app/core/services/i.order.service';
 import { TranslateService } from '@ngx-translate/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
     selector: "app-order-list-supplier",
@@ -61,6 +62,10 @@ export class OrderListSupplierComponent implements OnInit {
 
     OrderStatusEnum = OrderStatusEnum;
 
+    visiblePO: boolean;
+    documentUrl: SafeResourceUrl | undefined;
+    selectedOrder: OrderListModel;
+
     @ViewChild('actions') actions: Menu;
     @ViewChild(AppTableComponent) table!: AppTableComponent<RequestModel>;
 
@@ -70,6 +75,7 @@ export class OrderListSupplierComponent implements OnInit {
         private fb: FormBuilder,
         private translateService: TranslateService,
         private confirmationService: ConfirmationService,
+        private sanitizer: DomSanitizer
     ) {
 
         this.statusOptions = [
@@ -117,10 +123,10 @@ export class OrderListSupplierComponent implements OnInit {
         this.createFilterForm();
         this.createActionForm();
 
-        this.filterButtons = ['Açık Siparişler', 'Teslim Alınan Siparişler', 'İptal Edilen Siparişler', 'Uygunsuzluk Bildirimleri']
+        this.filterButtons = ['Açık Siparişler', 'Teslim Edilen Siparişler', 'İptal Edilen Siparişler', 'Uygunsuzluk Bildirimleri']
     }
 
-    
+
 
     createFilterForm() {
         const control = (defaultValue: any) =>
@@ -259,5 +265,19 @@ export class OrderListSupplierComponent implements OnInit {
 
             }
         });
+    }
+
+
+    loadDocument(base64Content: string, fileType: string) {
+        const objectUrl = `data:${fileType};base64,${base64Content}`;
+        this.documentUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
+    }
+
+    openPO(item: any) {
+        console.log(item);
+        this.selectedOrder = item;
+        this.documentUrl = null;
+        this.loadDocument(item.documentUrl, "application/pdf");
+        this.visiblePO = true;
     }
 }

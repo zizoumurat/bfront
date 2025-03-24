@@ -20,6 +20,7 @@ import { authGuard } from './core/guards/auth/auth.guard';
                     { path: 'suppliers', loadChildren: () => import('./presentation/suppliers/suppliers.module').then(m => m.SuppliersModule), data: { breadcrumb: 'suppliers' } },
                     { path: 'customers', loadChildren: () => import('./presentation/customers/customers.module').then(m => m.CustomersModule), data: { breadcrumb: 'customers' } },
                     { path: 'orders', loadChildren: () => import('./presentation/orders/orders.module').then(m => m.OrdersModule), data: { breadcrumb: 'orders' } },
+                    { path: 'payments', loadChildren: () => import('./presentation/payments/payments.module').then(m => m.PaymentsModule), data: { breadcrumb: 'payments' } },
                 ]
             },
             { path: 'auth', loadChildren: () => import('./presentation/auth/auth.module').then(m => m.AuthModule) },

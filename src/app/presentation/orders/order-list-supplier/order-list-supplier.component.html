@@ -50,7 +50,11 @@
 
 
                 <button pButton [pTooltip]="'updateOrderStatus' | translate" tooltipPosition="left"
-                    class="p-button-sm green-button" icon="pi pi-check-square" (click)="handleInc(item)">
+                    class="p-button-sm green-button mr-2" icon="pi pi-check-square" (click)="handleInc(item)">
+                </button>
+
+                <button pButton type="button" icon="pi pi-file-pdf" class="p-button-sm green-button"
+                    (click)="openPO(item)">
                 </button>
             </td>
         </tr>
@@ -104,7 +108,7 @@
                 <input type="text" class="p-inputtext p-component w-full" formControlName="invoiceNumber">
                 <app-error-message [control]="actionForm.get('invoiceNumber')"></app-error-message>
             </div>
-            
+
             <!-- İrsaliye No -->
             <div class="field col-12" *ngIf="actionForm.get('type')?.value === OrderStatusEnum.Shipped">
                 <label>{{ 'waybillNumber' | translate }}</label>
@@ -119,4 +123,18 @@
                 class="green-button w-8rem"></button>
         </div>
     </form>
+</p-dialog>
+
+
+<p-dialog *ngIf="selectedOrder" [header]="selectedOrder.orderCode" [(visible)]="visiblePO" [modal]="true"
+    [style]="{ width: '50rem' }" styleClass="form-modal">
+    <div class="formgrid grid">
+
+        <iframe *ngIf="documentUrl" [src]="documentUrl" width="100%" height="600px"></iframe>
+
+    </div>
+    <div class="flex justify-content-end gap-2">
+        <button pButton type="button" [label]="'close' | translate" class="orange-button w-8rem"
+            (click)="visiblePO = false"></button>
+    </div>
 </p-dialog>

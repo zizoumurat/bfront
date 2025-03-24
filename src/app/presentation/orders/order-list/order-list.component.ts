@@ -11,7 +11,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ListItemModel } from 'src/app/core/domain/listItem.model';
 import { IOrderPreparationService } from 'src/app/core/services/i.orderPreparation.service';
 import { ORDERPREPARATION_SERVICE } from 'src/app/service/orderPreparationService';
-import { OrderStatusEnum } from 'src/app/core/domain/orderPreparation.model';
+import { OrderListModel, OrderStatusEnum } from 'src/app/core/domain/orderPreparation.model';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
     selector: "app-order-list",
@@ -49,13 +50,18 @@ export class OrderListComponent implements OnInit {
     expandedRows: { [key: number]: boolean } = {};
     subExpandedRows: { [key: number]: boolean } = {};
 
+    visiblePO: boolean;
+    documentUrl: SafeResourceUrl | undefined;
+    selectedOrder: OrderListModel;
+
     @ViewChild('actions') actions: Menu;
     @ViewChild(AppTableComponent) table!: AppTableComponent<RequestModel>;
 
     constructor(
         @Inject(ORDERPREPARATION_SERVICE) protected service: IOrderPreparationService,
         private authHelper: AuthHelper,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private sanitizer: DomSanitizer
     ) { }
 
     ngOnInit(): void {
@@ -130,12 +136,12 @@ export class OrderListComponent implements OnInit {
 
     toggleRow(item: any) {
         if (this.expandedRows[item.id]) {
-            this.expandedRows = {}; 
+            this.expandedRows = {};
         } else {
-            this.expandedRows = { [item.id]: true }; 
+            this.expandedRows = { [item.id]: true };
         }
     }
-    
+
     toggleSubRow(order: any) {
         if (this.subExpandedRows[order.id]) {
             this.subExpandedRows = {};
@@ -143,8 +149,6 @@ export class OrderListComponent implements OnInit {
             this.subExpandedRows = { [order.id]: true };
         }
     }
-    
-    
 
     async submitOrder() {
         const orderItems = this.createOrderTableData.map((item: any) => ({
@@ -164,6 +168,19 @@ export class OrderListComponent implements OnInit {
         this.selectedRow = null;
         this.visibleCreateOrder = false;
         this.createOrderTableData = [];
-        this.table.refresh();
+        this.loadData();
+    }
+
+    loadDocument(base64Content: string, fileType: string) {
+        const objectUrl = `data:${fileType};base64,${base64Content}`;
+        this.documentUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
+
+    }
+
+    openPO(item: any) {
+        this.selectedOrder = item;
+        this.documentUrl = null;
+        this.loadDocument(item.documentUrl, "application/pdf");
+        this.visiblePO = true;
     }
 }
