@@ -5,7 +5,6 @@ import { Menu } from 'primeng/menu';
 import { PaginationFilterModel } from 'src/app/core/domain/models/pagination.filter.model';
 import { NotificationHelper } from 'src/app/core/helpers/notification/notification.helper';
 import { AppTableComponent } from '../../shared/table/table.component';
-import { RequestModel } from 'src/app/core/domain/request.model';
 import { AuthHelper } from 'src/app/core/helpers/auth/auth.helper';
 import { ConfirmationService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,11 +15,11 @@ import { LISTITEM_SERVICE } from 'src/app/service/listItem.service';
 import { IListItemService } from 'src/app/core/services/i.listItem.service';
 import { SUPPLIERPORTFOLIO_SERVICE } from 'src/app/service/supplierPortfolio.service';
 import { ISupplierPortfolioService } from 'src/app/core/services/i.supplierPortfolio.service';
-import { SupplierModel } from 'src/app/core/domain/supplier.model';
 import { SupplierPortfolioModel } from 'src/app/core/domain/supplierPortfolio.model';
 import { SUPPLIERACTION_SERVICE } from 'src/app/service/supplierAction.service';
 import { ISupplierActionService } from 'src/app/core/services/i.supplierAction.service';
 import { SupplierActionModel, SupplierActionStatusEnum, SupplierActionTypeEnum } from 'src/app/core/domain/supplierAction.model';
+import { NonconformityReasonEnum } from 'src/app/core/domain/orderPreparation.model';
 
 @Component({
     selector: "app-performance-management",
@@ -77,18 +76,15 @@ export class PerformanceManagementComponent implements OnInit {
         @Inject(SUPPLIERPORTFOLIO_SERVICE) protected service: ISupplierPortfolioService,
         @Inject(SUPPLIERACTION_SERVICE) protected actionService: ISupplierActionService,
         @Inject(LISTITEM_SERVICE) private listService: IListItemService,
-        private router: Router,
         private messageService: NotificationHelper,
-        private authHelper: AuthHelper,
-        private confirmationService: ConfirmationService,
         private translateService: TranslateService,
         private fb: FormBuilder
     ) {
-        this.actionTypeOptions = Object.keys(SupplierActionTypeEnum)
-            .filter((key) => isNaN(Number(key))) // Sayısal değerleri filtrele
+        this.actionTypeOptions = Object.keys(NonconformityReasonEnum)
+            .filter((key) => isNaN(Number(key)))
             .map((key) => ({
-                id: SupplierActionTypeEnum[key as keyof typeof SupplierActionTypeEnum],
-                name: this.translateService.instant(`SupplierActionType.${key}`)
+                id: NonconformityReasonEnum[key as keyof typeof NonconformityReasonEnum],
+                name: this.translateService.instant(`NonconformityReason.${key}`)
             }));
     }
 
@@ -309,7 +305,7 @@ export class PerformanceManagementComponent implements OnInit {
     }
 
     getSupplierActionTypeKey(type: number): string {
-        return SupplierActionTypeEnum[type];
+        return NonconformityReasonEnum[type];
     }
 
     getSupplierActionStatusKey(status: number): string {

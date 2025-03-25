@@ -9,9 +9,7 @@ import { AuthHelper } from 'src/app/core/helpers/auth/auth.helper';
 import { ApprovalStatus } from 'src/app/core/enums/request.enum';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ListItemModel } from 'src/app/core/domain/listItem.model';
-import { IOrderPreparationService } from 'src/app/core/services/i.orderPreparation.service';
-import { ORDERPREPARATION_SERVICE } from 'src/app/service/orderPreparationService';
-import { NonconformityReasonEnum, OrderListModel, OrderStatusEnum } from 'src/app/core/domain/orderPreparation.model';
+import { OrderListModel, OrderStatusEnum } from 'src/app/core/domain/orderPreparation.model';
 import { ORDER_SERVICE } from 'src/app/service/orderService';
 import { IOrderService } from 'src/app/core/services/i.order.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -33,9 +31,6 @@ export class OrderListSupplierComponent implements OnInit {
     locationOptions!: ListItemModel[];
     currencyOptions: ListItemModel[];
 
-
-    visibleCreateOrder: boolean;
-    createOrderTableData: any[];
 
     filterForm: FormGroup;
 
@@ -102,6 +97,7 @@ export class OrderListSupplierComponent implements OnInit {
             id: control(0),
             type: control(null, [Validators.required]),
             invoiceNumber: control(''),
+            invoiceDate: control(null),
             waybillNumber: control(''),
 
         });
@@ -109,12 +105,15 @@ export class OrderListSupplierComponent implements OnInit {
         this.actionForm.get('type')?.valueChanges.subscribe(value => {
             if (value === OrderStatusEnum.Shipped) {
                 this.actionForm.get('invoiceNumber')?.setValidators(Validators.required);
+                this.actionForm.get('invoiceDate')?.setValidators(Validators.required);
                 this.actionForm.get('waybillNumber')?.setValidators(Validators.required);
             } else {
                 this.actionForm.get('invoiceNumber')?.clearValidators();
+                this.actionForm.get('invoiceDate')?.clearValidators();
                 this.actionForm.get('waybillNumber')?.clearValidators();
             }
             this.actionForm.get('invoiceNumber')?.updateValueAndValidity();
+            this.actionForm.get('invoiceDate')?.updateValueAndValidity();
             this.actionForm.get('waybillNumber')?.updateValueAndValidity();
         });
     }
@@ -125,7 +124,6 @@ export class OrderListSupplierComponent implements OnInit {
 
         this.filterButtons = ['Açık Siparişler', 'Teslim Edilen Siparişler', 'İptal Edilen Siparişler', 'Uygunsuzluk Bildirimleri']
     }
-
 
 
     createFilterForm() {
@@ -140,17 +138,6 @@ export class OrderListSupplierComponent implements OnInit {
         });
     }
 
-    createOrder(item) {
-        this.selectedRow = item;
-        this.visibleCreateOrder = true;
-
-        this.createOrderTableData = this.selectedRow.offerDetailList.map((item: any) => ({
-            offerDetailId: item.id,
-            productDefinition: item.productDefinition,
-            unitPrice: item.unitPrice,
-            maxQuantity: item.maxQuantity,
-        }));
-    }
 
     showOrderList() {
         this.selectedRow = this.table.selectedRow;
@@ -236,6 +223,10 @@ export class OrderListSupplierComponent implements OnInit {
         this.actionForm.patchValue({ id });
 
         this.visibleReportInc = true;
+    }
+
+    isOpenOrder(order: OrderListModel) {
+        return [OrderStatusEnum.OrderPending, OrderStatusEnum.InProduction, OrderStatusEnum.InShipment].includes(order.status)
     }
 
     async onSubmit() {

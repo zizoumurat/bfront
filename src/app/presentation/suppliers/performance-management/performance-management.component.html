@@ -38,7 +38,7 @@
             <ng-template pTemplate="body" let-action>
                 <tr>
                     <td class="text-center">
-                        {{ ('SupplierActionType.' + getSupplierActionTypeKey(action.type)) | translate }}
+                        {{ ('NonconformityReason.' + getSupplierActionTypeKey(action.type)) | translate }}
                     </td>
                     <td class="text-center">{{ action.subject }}</td>
                     <td class="text-center">{{ action.detail }}</td>

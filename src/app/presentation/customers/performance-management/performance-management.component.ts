@@ -23,6 +23,7 @@ import { ISupplierActionService } from 'src/app/core/services/i.supplierAction.s
 import { SupplierActionModel, SupplierActionStatusEnum, SupplierActionTypeEnum } from 'src/app/core/domain/supplierAction.model';
 import { CUSTOMERPORTFOLIO_SERVICE } from 'src/app/service/customerPortfolio.service';
 import { ICustomerPortfolioService } from 'src/app/core/services/i.customerPortfolio.service';
+import { NonconformityReasonEnum } from 'src/app/core/domain/orderPreparation.model';
 
 @Component({
     selector: "app-customer-performance-management",
@@ -87,11 +88,11 @@ export class PerformanceManagementComponent implements OnInit {
         private translateService: TranslateService,
         private fb: FormBuilder
     ) {
-        this.actionTypeOptions = Object.keys(SupplierActionTypeEnum)
-            .filter((key) => isNaN(Number(key))) // Sayısal değerleri filtrele
+        this.actionTypeOptions = Object.keys(NonconformityReasonEnum)
+            .filter((key) => isNaN(Number(key)))
             .map((key) => ({
-                id: SupplierActionTypeEnum[key as keyof typeof SupplierActionTypeEnum],
-                name: this.translateService.instant(`SupplierActionType.${key}`)
+                id: NonconformityReasonEnum[key as keyof typeof NonconformityReasonEnum],
+                name: this.translateService.instant(`NonconformityReason.${key}`)
             }));
 
         this.supplierActionStatusOptions = Object.keys(SupplierActionStatusEnum)
@@ -303,7 +304,7 @@ export class PerformanceManagementComponent implements OnInit {
     }
 
     getSupplierActionTypeKey(type: number): string {
-        return SupplierActionTypeEnum[type];
+        return NonconformityReasonEnum[type];
     }
 
     getSupplierActionStatusKey(status: number): string {

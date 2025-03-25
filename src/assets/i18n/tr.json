@@ -588,10 +588,12 @@
     "OccupationalSafetyIssue": "İş Güvenliği Uygunsuzluğu",
     "Other": "Diğer"
   },
+  
   "statusUpdate": "Durum Güncelleme",
   "received": "Teslim Alındı",
   "updateOrderStatus": "Sipariş Durumunu Güncelle",
   "invoiceNumber": "Fatura Numarası",
+  "invoiceDate": "Fatura Vade Tarihi",
   "waybillNumber": "İrsaliye Numarası",
   "ContractApproved": "Sözleşme Onaylandı",
   "OrderCreated": "Sipariş başarıyla oluşturuldu."

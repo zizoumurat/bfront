@@ -13,7 +13,7 @@
             <th><span>Durum</span></th>
             <th><span>Toplam Tutar</span></th>
             <th><span>Tarih</span></th>
-            <th style="min-width: auto;"></th>
+            <th class="fixed-column sticky-column"></th>
         </tr>
     </ng-template>
 
@@ -31,18 +31,21 @@
             <td>{{ ('OrderStatusEnum.' + getOrderStatus(item.status)) | translate }}</td>
             <td>{{ item.totalPrice | currency:item.orderPreparation.currencyCode }}</td>
             <td>{{ item.orderDate | date:'short' }}</td>
-            <td>
-                <button pButton [pTooltip]="'contactSupplier' | translate" tooltipPosition="left"
-                    class="p-button-sm green-button mr-2" icon="pi pi-comments">
-                </button>
+            <td class="fixed-column sticky-column">
+                <div class="flex justify-content-center">
+                    <button pButton [pTooltip]="'contactSupplier' | translate" tooltipPosition="left"
+                        class="p-button-sm green-button mr-2" icon="pi pi-comments">
+                    </button>
 
-                <button pButton [pTooltip]="'reportInc' | translate" tooltipPosition="left"
-                    class="p-button-sm green-button mr-2" icon="pi pi-exclamation-triangle" (click)="handleInc(item)">
-                </button>
+                    <button pButton [pTooltip]="'reportInc' | translate" tooltipPosition="left"
+                        class="p-button-sm green-button mr-2" icon="pi pi-exclamation-triangle"
+                        (click)="handleInc(item)">
+                    </button>
 
-                <button pButton [pTooltip]="'received' | translate" tooltipPosition="left"
-                    class="p-button-sm green-button" icon="pi pi-check-square" (click)="received(item)">
-                </button>
+                    <button *ngIf="item.status === orderStatusEnum.Shipped" pButton [pTooltip]="'received' | translate" tooltipPosition="left"
+                        class="p-button-sm green-button" icon="pi pi-check-square" (click)="received(item)">
+                    </button>
+                </div>
             </td>
         </tr>
 
@@ -85,8 +88,8 @@
         <div class="formgrid grid">
             <div class="field col-12">
                 <label>{{ 'type' | translate }}</label>
-                <p-dropdown appendTo='body' [options]="nonconformityStatusOptions" styleClass="w-full" formControlName="type"
-                    optionLabel="name" optionValue="id"></p-dropdown>
+                <p-dropdown appendTo='body' [options]="nonconformityStatusOptions" styleClass="w-full"
+                    formControlName="type" optionLabel="name" optionValue="id"></p-dropdown>
                 <app-error-message [control]="actionForm.get('type')"></app-error-message>
             </div>
             <div class="field col-12">

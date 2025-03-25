@@ -29,6 +29,7 @@ export class StatusUpdateComponent implements OnInit {
     selectedRow: any;
     locationOptions!: ListItemModel[];
     currencyOptions: ListItemModel[];
+    orderStatusEnum = OrderStatusEnum;
 
 
     visibleCreateOrder: boolean;

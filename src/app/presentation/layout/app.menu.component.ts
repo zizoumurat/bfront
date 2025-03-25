@@ -147,12 +147,12 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: "supplierPortfolioManagement",
                         routerLink: "/suppliers/portfolio-management",
-                        visible: this.authHelper.isAuthorized(["suppliers.supplierPortfolioManagement"]),
+                        visible: this.authHelper.isAuthorized(["customers.supplierPortfolioManagement"]),
                     },
                     {
                         label: "supplierPerformanceManagement",
                         routerLink: "/suppliers/performance-management",
-                        visible: this.authHelper.isAuthorized(["suppliers.supplierPerformanceManagement"]),
+                        visible: this.authHelper.isAuthorized(["customers.supplierPerformanceManagement"]),
                     },
                 ],
             },
@@ -164,12 +164,12 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: "permission.customerPortfolioManagement",
                         routerLink: "/customers/portfolio-management",
-                        visible: this.authHelper.isAuthorized(["customers.customerPortfolioManagement"]),
+                        visible: this.authHelper.isAuthorized(["suppliers.customerPortfolioManagement"]),
                     },
                     {
                         label: "permission.customerPerformanceManagement",
                         routerLink: "/customers/performance-management",
-                        visible: this.authHelper.isAuthorized(["customers.customerPerformanceManagement"]),
+                        visible: this.authHelper.isAuthorized(["suppliers.customerPerformanceManagement"]),
                     },
                 ],
             },

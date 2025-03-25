@@ -25,7 +25,7 @@
             <th><span>Durum</span></th>
             <th><span>Toplam Tutar</span></th>
             <th><span>Tarih</span></th>
-            <th style="min-width: auto;"></th>
+            <th class="fixed-column sticky-column"></th>
         </tr>
     </ng-template>
 
@@ -43,13 +43,13 @@
             <td>{{ ('OrderStatusEnum.' + getOrderStatus(item.status)) | translate }}</td>
             <td>{{ item.totalPrice | currency:item.orderPreparation.currencyCode }}</td>
             <td>{{ item.orderDate | date:'short' }}</td>
-            <td>
+            <td class="fixed-column sticky-column">
                 <button pButton [pTooltip]="'contactCustomer' | translate" tooltipPosition="left"
                     class="p-button-sm green-button mr-2" icon="pi pi-comments">
                 </button>
 
 
-                <button pButton [pTooltip]="'updateOrderStatus' | translate" tooltipPosition="left"
+                <button *ngIf="isOpenOrder(item)" pButton [pTooltip]="'updateOrderStatus' | translate" tooltipPosition="left"
                     class="p-button-sm green-button mr-2" icon="pi pi-check-square" (click)="handleInc(item)">
                 </button>
 
@@ -107,6 +107,13 @@
                 <label>{{ 'invoiceNumber' | translate }}</label>
                 <input type="text" class="p-inputtext p-component w-full" formControlName="invoiceNumber">
                 <app-error-message [control]="actionForm.get('invoiceNumber')"></app-error-message>
+            </div>
+
+            <div class="field col-12" *ngIf="actionForm.get('type')?.value === OrderStatusEnum.Shipped">
+                <label>{{ 'invoiceDate' | translate }}</label>
+                <p-calendar appendTo="body" class="three-side-input" styleClass="w-full" [showIcon]="true"
+                    formControlName="invoiceDate" dateFormat="dd/mm/yy"></p-calendar>
+                <app-error-message [control]="actionForm.get('invoiceDate')"></app-error-message>
             </div>
 
             <!-- İrsaliye No -->
