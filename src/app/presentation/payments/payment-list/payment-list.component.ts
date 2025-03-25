@@ -77,7 +77,7 @@ export class PaymentListComponent implements OnInit {
     ngOnInit(): void {
         this.searchObject = { status: OrderStatusEnum.Delivered };
 
-        this.filterButtons = ['Açık Siparişler', 'Teslim Alınan Siparişler', 'İptal Edilen Siparişler', 'Uygunsuzluk Bildirimleri']
+        this.filterButtons = ['Tüm Tedarikçi Faturaları', 'Vadesi Geçen Tedarikçi Faturaları', 'Vadesi Gelmemiş Tedarikçi Faturaları']
     }
 
     submitFilter() {
@@ -87,6 +87,25 @@ export class PaymentListComponent implements OnInit {
     resetFilterForm() {
         this.searchObject = null;
         this.filterForm.reset();
+    }
+
+    applyFilter(index: number) {
+        this.activeFilter = index;
+
+        if (index === 0) {
+            this.searchObject = { invoiceDate: null, ...this.searchObject };
+        }
+
+        if (index === 1) {
+            this.searchObject = { invoiceDate: false, ...this.searchObject };
+        }
+
+        if (index === 2) {
+            this.searchObject = { status: OrderStatusEnum.OrderCancelled };
+        }
+
+
+        this.loadData();
     }
 
     onEnter(event: KeyboardEvent): void {

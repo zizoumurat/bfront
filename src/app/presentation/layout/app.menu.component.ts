@@ -116,29 +116,52 @@ export class AppMenuComponent implements OnInit {
                 icon: "pi pi-fw pi-shopping-bag",
                 routerLink: "/orders",
                 items: [
-                  {
-                    label: "orderList",
-                    routerLink: "/orders/order-list",
-                    visible: this.authHelper.isAuthorized(["orders.orderLists"]),
-                  },
-                  {
-                    label: "orderList",
-                    routerLink: "/orders/order-list-supplier",
-                    visible: this.authHelper.isAuthorized(["offers.makeOffer"]),
-                  },
-                  {
-                    label: "orderArchive",
-                    routerLink: "/orders/order-archive",
-                    visible: this.authHelper.isAuthorized(["orders.orderArchive"]),
+                    {
+                        label: "orderList",
+                        routerLink: "/orders/order-list",
+                        visible: this.authHelper.isAuthorized(["orders.orderLists"]),
+                    },
+                    {
+                        label: "orderList",
+                        routerLink: "/orders/order-list-supplier",
+                        visible: this.authHelper.isAuthorized(["offers.makeOffer"]),
+                    },
+                    {
+                        label: "orderArchive",
+                        routerLink: "/orders/order-archive",
+                        visible: this.authHelper.isAuthorized(["orders.orderArchive"]),
 
-                  },
-                  {
-                    label: "statusUpdate",
-                    routerLink: "/orders/status-update",
-                    visible: this.authHelper.isAuthorized(["orders.statusUpdate"]),
-                  },
+                    },
+                    {
+                        label: "statusUpdate",
+                        routerLink: "/orders/status-update",
+                        visible: this.authHelper.isAuthorized(["orders.statusUpdate"]),
+                    },
                 ],
-              },
+            },
+            {
+                label: "payments",
+                icon: "pi pi-fw pi-shopping-bag",
+                routerLink: "/payments",
+                items: [
+                    {
+                        label: "paymentList",
+                        routerLink: "/payments/payment-list",
+                        visible: this.authHelper.isAuthorized(["payments.paymentLists"]),
+                    },
+                    {
+                        label: "paymentApprovals",
+                        routerLink: "/orders/order-list-supplier",
+                        visible: this.authHelper.isAuthorized(["payments.paymentApprovals"]),
+                    },
+                    {
+                        label: "paymentInstructions",
+                        routerLink: "/orders/order-archive",
+                        visible: this.authHelper.isAuthorized(["payments.paymentInstructions"]),
+
+                    },
+                ],
+            },
             {
                 label: "suppliers",
                 icon: "pi pi-fw pi-sitemap",

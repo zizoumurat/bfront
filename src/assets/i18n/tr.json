@@ -588,7 +588,6 @@
     "OccupationalSafetyIssue": "İş Güvenliği Uygunsuzluğu",
     "Other": "Diğer"
   },
-  
   "statusUpdate": "Durum Güncelleme",
   "received": "Teslim Alındı",
   "updateOrderStatus": "Sipariş Durumunu Güncelle",
@@ -596,5 +595,8 @@
   "invoiceDate": "Fatura Vade Tarihi",
   "waybillNumber": "İrsaliye Numarası",
   "ContractApproved": "Sözleşme Onaylandı",
-  "OrderCreated": "Sipariş başarıyla oluşturuldu."
+  "OrderCreated": "Sipariş başarıyla oluşturuldu.",
+  "paymentList": "Ödeme Listeleri",
+  "paymentApprovals": "Ödeme Onayları",
+  "paymentInstructions": "Ödeme Talimatları"
 }
