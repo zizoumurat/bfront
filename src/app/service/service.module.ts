@@ -30,6 +30,7 @@ import { CUSTOMERPORTFOLIO_SERVICE, CustomerPortfolioService } from './customerP
 import { ORDERPREPARATION_SERVICE, OrderPreparationService } from './orderPreparationService';
 import { ORDER_SERVICE, OrderService } from './orderService';
 import { PaymentListService, PAYMETNLIST_SERVICE } from './paymentList.service';
+import { RETURN_SERVICE, ReturnService } from './returnService';
 
 
 @NgModule({
@@ -67,6 +68,7 @@ import { PaymentListService, PAYMETNLIST_SERVICE } from './paymentList.service';
         { provide: ORDERPREPARATION_SERVICE, useClass: OrderPreparationService },
         { provide: ORDER_SERVICE, useClass: OrderService },
         { provide: PAYMETNLIST_SERVICE, useClass: PaymentListService },
+        { provide: RETURN_SERVICE, useClass: ReturnService },
     ]
 })
 export class ServiceModule { }

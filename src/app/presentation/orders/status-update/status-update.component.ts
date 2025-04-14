@@ -36,6 +36,7 @@ export class StatusUpdateComponent implements OnInit {
     createOrderTableData: any[];
 
     filterForm: FormGroup;
+    returnForm: FormGroup;
 
     currentUser = this.authHelper.getCurrentUser();
     currencyEnum: FormatEnum = FormatEnum.currency;
@@ -94,6 +95,7 @@ export class StatusUpdateComponent implements OnInit {
     ngOnInit(): void {
         this.createFilterForm();
         this.createActionForm();
+        this.createReturnForm();
 
         this.filterButtons = [
             'openOrders',
@@ -115,15 +117,30 @@ export class StatusUpdateComponent implements OnInit {
         });
     }
 
-    createOrder(item) {
+    createReturnForm() {
+        const control = (defaultValue: any, validators: any[] = []) =>
+            this.fb.control(defaultValue, { validators });
+
+        this.returnForm = this.fb.group({
+            id: control(0),
+            orderId: control(null, [Validators.required]),
+            invoiceNumber: control(null, [Validators.required]),
+            waybillNumber: control(null, [Validators.required]),
+            reason: control(null, [Validators.required]),
+        });
+    }
+
+    createReturn(item) {
         this.selectedRow = item;
+        this.returnForm.get('orderId').setValue(item.id);
         this.visibleCreateOrder = true;
 
-        this.createOrderTableData = this.selectedRow.offerDetailList.map((item: any) => ({
-            offerDetailId: item.id,
+        this.createOrderTableData = this.selectedRow.orderItems.map((item: any) => ({
+            orderItemId: item.id,
             productDefinition: item.productDefinition,
             unitPrice: item.unitPrice,
-            maxQuantity: item.maxQuantity,
+            maxQuantity: item.quantity,
+            quantity: null,
         }));
     }
 
@@ -205,6 +222,33 @@ export class StatusUpdateComponent implements OnInit {
         this.actionForm.reset();
         this.visibleReportInc = false;
 
+        this.loadData();
+    }
+
+    async submitReturn () {
+        console.log(this.returnForm.invalid);
+        console.log(this.returnForm.value);
+        if(this.returnForm.invalid)
+            return;
+
+        const orderItems = this.createOrderTableData.map((item: any) => ({
+            orderItemId: item.orderItemId,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+        }));
+
+        const data = {
+            ...this.returnForm.value,
+            orderPreparationId: this.selectedRow.id,
+            orderItems
+        };
+
+        //await this.service.createOrder(data);
+        console.log(data);
+
+        this.selectedRow = null;
+        this.visibleCreateOrder = false;
+        this.createOrderTableData = [];
         this.loadData();
     }
 

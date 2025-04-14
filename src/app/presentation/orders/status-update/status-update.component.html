@@ -42,13 +42,15 @@
                         (click)="handleInc(item)">
                     </button>
 
-                    <button *ngIf="item.status === orderStatusEnum.Shipped" pButton [pTooltip]="'received' | translate" tooltipPosition="left"
-                        class="p-button-sm green-button" icon="pi pi-check-square" (click)="received(item)">
+                    <button *ngIf="item.status === orderStatusEnum.Shipped" pButton [pTooltip]="'received' | translate"
+                        tooltipPosition="left" class="p-button-sm green-button" icon="pi pi-check-square"
+                        (click)="received(item)">
                     </button>
 
-                    <button *ngIf="item.status === orderStatusEnum.Shipped" pButton [pTooltip]="'returnItem' | translate" tooltipPosition="left"
-                    class="p-button-sm green-button" icon="pi pi-undo" (click)="received(item)">
-                </button>
+                    <button *ngIf="item.status === orderStatusEnum.Shipped" pButton
+                        [pTooltip]="'returnItem' | translate" tooltipPosition="left" class="p-button-sm green-button"
+                        icon="pi pi-undo" (click)="createReturn(item)">
+                    </button>
                 </div>
             </td>
         </tr>
@@ -121,4 +123,74 @@
                 class="green-button w-8rem"></button>
         </div>
     </form>
+</p-dialog>
+
+<p-dialog *ngIf="selectedRow" [header]="'createReturn' | translate" [modal]="true" [(visible)]="visibleCreateOrder"
+    [style]="{ width: '80rem' }" styleClass="form-modal">
+    <div>
+        <div><span class="font-bold">{{selectedRow.orderPreparation.supplier}}</span></div>
+        <div class="mt-2"><span class="font-bold">{{selectedRow.orderPreparation.mainCategory}} /
+                {{selectedRow.orderPreparation.subCategory}} /
+                {{selectedRow.orderPreparation.requestGroup}}</span></div>
+    </div>
+    <div *ngIf="createOrderTableData" class="mt-4">
+        <p-table [value]="createOrderTableData" styleClass="p-datatable-gridlines default-table custom-paginator"
+            [scrollable]="true" dataKey="tblReturnTable">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th><span>Ürün / Hizmet Tanımı</span></th>
+                    <th><span>{{ 'unitPrice' | translate }}</span></th>
+                    <th style="min-width: auto;width: 150px;"><span>Gelen Miktar</span></th>
+                    <th style="min-width: auto;width: 150px;"><span>İade Miktarı</span></th>
+                    <th style="min-width: auto;width: 150px;"><span>{{ 'price' | translate }}</span></th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{ row.productDefinition }}</td>
+                    <td>
+                        <b [innerHTML]="row.unitPrice | formatColumn: currencyEnum : selectedRow.currencyCode"></b>
+                    </td>
+                    <td>{{ row.maxQuantity }} {{ selectedRow.orderPreparation.unit }}</td>
+                    <td>
+                        <p-inputNumber inputId="integeronly" styleClass="w-full" inputStyleClass="w-full text-center"
+                            [(ngModel)]="row.quantity" [min]="0" [max]="row.maxQuantity"></p-inputNumber>
+                    </td>
+                    <td>
+                        <b
+                            [innerHTML]="(row.quantity ? row.quantity * row.unitPrice : 0) | formatColumn: currencyEnum : selectedRow.currencyCode"></b>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <form [formGroup]="returnForm" (ngSubmit)="submitReturn()">
+            <div class="formgrid grid mt-4">
+                <div class="field col-12 xl:col-6">
+                    <label>{{'returnReason' | translate }}</label>
+                    <textarea rows="3" formControlName="reason" pInputTextarea class="w-full"></textarea>
+                    <app-error-message [control]="returnForm.get('reason')"></app-error-message>
+                </div>
+                <div class="field col-6 xl:col-3">
+                    <label>{{'invoiceNumber' | translate }}</label>
+                    <input pInputText class="w-full" formControlName="invoiceNumber" />
+                    <app-error-message [control]="returnForm.get('invoiceNumber')"></app-error-message>
+                </div>
+                <div class="field col-6 xl:col-3">
+                    <label>{{'waybillNumber' | translate}}</label>
+                    <input pInputText class="w-full" formControlName="waybillNumber" />
+                    <app-error-message [control]="returnForm.get('waybillNumber')"></app-error-message>
+                </div>
+
+            </div>
+
+            <div class="flex my-4 justify-content-end">
+                <button type="submit" pButton icon="pi pi-send" label="{{ 'createReturn' | translate }}"
+                    tooltipPosition="top" class="green-button"></button>
+            </div>
+        </form>
+    </div>
+
+
 </p-dialog>

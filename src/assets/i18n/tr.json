@@ -626,5 +626,7 @@
   "cancelledOrders": "İptal Edilen Siparişler",
   "nonconformityNotifications": "Uygunsuzluk Bildirimleri",
   "receivables": "Alacaklar",
-  "returnItem": "İade Et"
+  "returnItem": "İade Et",
+  "createReturn": "İade Oluştur",
+  "returnReason": "İade Gerekçesi"
 }
