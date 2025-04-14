@@ -13,6 +13,8 @@ import { NonconformityReasonEnum, OrderStatusEnum } from 'src/app/core/domain/or
 import { ORDER_SERVICE } from 'src/app/service/orderService';
 import { IOrderService } from 'src/app/core/services/i.order.service';
 import { TranslateService } from '@ngx-translate/core';
+import { RETURN_SERVICE } from 'src/app/service/returnService';
+import { IReturnService } from 'src/app/core/services/i.return.service';
 
 @Component({
     selector: "app-status-update",
@@ -64,6 +66,7 @@ export class StatusUpdateComponent implements OnInit {
 
     constructor(
         @Inject(ORDER_SERVICE) protected service: IOrderService,
+        @Inject(RETURN_SERVICE) protected returnService: IReturnService,
         private authHelper: AuthHelper,
         private fb: FormBuilder,
         private translateService: TranslateService,
@@ -126,7 +129,7 @@ export class StatusUpdateComponent implements OnInit {
             orderId: control(null, [Validators.required]),
             invoiceNumber: control(null, [Validators.required]),
             waybillNumber: control(null, [Validators.required]),
-            reason: control(null, [Validators.required]),
+            reason: control(0, [Validators.required]),
         });
     }
 
@@ -225,9 +228,15 @@ export class StatusUpdateComponent implements OnInit {
         this.loadData();
     }
 
+    
+    get disableReturnFormPost() {
+        const hasQuantity = this.createOrderTableData.some(x=>x.quantity && x.quantity > 0)
+
+        return this.returnForm.invalid || !hasQuantity;
+    }
+
+
     async submitReturn () {
-        console.log(this.returnForm.invalid);
-        console.log(this.returnForm.value);
         if(this.returnForm.invalid)
             return;
 
@@ -243,8 +252,7 @@ export class StatusUpdateComponent implements OnInit {
             orderItems
         };
 
-        //await this.service.createOrder(data);
-        console.log(data);
+        await this.returnService.createReturn(data);
 
         this.selectedRow = null;
         this.visibleCreateOrder = false;

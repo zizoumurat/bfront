@@ -187,7 +187,7 @@
 
             <div class="flex my-4 justify-content-end">
                 <button type="submit" pButton icon="pi pi-send" label="{{ 'createReturn' | translate }}"
-                    tooltipPosition="top" class="green-button"></button>
+                    tooltipPosition="top" class="green-button" [disabled]="disableReturnFormPost"></button>
             </div>
         </form>
     </div>
