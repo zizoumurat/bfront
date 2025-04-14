@@ -1,0 +1,34 @@
+.mb-n-2 {
+    margin-bottom: -10px;
+    padding: 10px;
+}
+
+:host ::ng-deep .default-table {
+    th {
+        min-width: 0;
+    }
+}
+
+.supplier-name {
+    min-width: 220px;
+    text-align: center;
+}
+
+.offer-item-list {
+    li {
+        display: flex;
+        justify-content: space-between;
+        margin-top: .8rem;
+    }
+}
+
+.table-container {
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+}
+
+.pi-bookmark-fill {
+    color: var(--orange-500);
+    position: absolute;
+    top:0;
+}

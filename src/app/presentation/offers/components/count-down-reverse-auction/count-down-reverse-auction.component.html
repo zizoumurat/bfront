@@ -1,0 +1,17 @@
+<div class="countdown-container">
+    <h5>{{ 'reverseAuctionTimeRemaining' | translate }}</h5>
+    <div class="countdown">
+        <div class="time-box">
+            <span>{{ getFormattedCount(hours) }}</span>
+            <div class="label">{{ 'hour' | translate }}</div>
+        </div>
+        <div class="time-box">
+            <span>{{ getFormattedCount(minutes) }}</span>
+            <div class="label">{{ 'minutes' | translate }}</div>
+        </div>
+        <div class="time-box">
+            <span>{{ getFormattedCount(seconds) }}</span>
+            <div class="label">{{ 'seconds' | translate }}</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<i class="pi pi-ticket page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (selectChange)="onSelectChange($event)"
+    (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+<div class="flex justify-content-end mb-3">
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addApplyChain' | translate"
+        (click)="handleAdd()"></button>
+</div>
+
+<app-table dataKey="tblApplyChain" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="(!selected ? 'addApplyChain' : 'editApplyChain') | translate" [modal]="true"
+    [(visible)]="displayForm" [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12 xl:col-6">
+                <label>{{ 'users' | translate }}</label>
+                <p-multiSelect appendTo='body' [options]="userOptions" styleClass="w-full"
+                    formControlName="userIdList" optionLabel="name" optionValue="id"></p-multiSelect>
+            </div>
+            <div class="field col-12 xl:col-6">
+                <label>{{ 'spendLimit' | translate }}</label>
+                <p-inputNumber mode="decimal" formControlName="spendLimit" class="w-full" styleClass="w-full"
+                    inputStyleClass="w-full"></p-inputNumber>
+                <app-error-message [control]="form.get('spendLimit')"></app-error-message>
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label>{{ 'currency' | translate }}</label>
+                <p-dropdown styleClass="w-full" formControlName="currencyId" [options]="currencyOptions"></p-dropdown>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

@@ -1,0 +1,21 @@
+image: node:20.15.0
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Build
+          script:
+            - chmod +x .cicd/*
+            - .cicd/build.sh
+          artifacts:
+            - dist/**
+      - step:
+          name: Deploy
+          runs-on:
+            - self.hosted
+            - windows
+            - buyersoft
+          script:
+            - c:\windows\system32\inetsrv\appcmd.exe stop site app.buyersoft.com
+            - xcopy "dist\buyersoft" "C:\inetpub\wwwroot\app.buyersoft.com" /h /i /c /k /e /r /y
+            - c:\windows\system32\inetsrv\appcmd.exe start site app.buyersoft.com

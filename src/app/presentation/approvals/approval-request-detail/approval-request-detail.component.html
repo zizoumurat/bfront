@@ -1,0 +1,59 @@
+<i class="pi pi-check-square page-icon"></i>
+
+
+<div *ngIf="request">
+
+    <div class="grid">
+        <div class="col-12 lg:col-6 xl:col-6">
+            <div class="col-12">
+                <app-offer-summary *ngIf="summaryTable" [offerSummary]="summaryTable"></app-offer-summary>
+            </div>
+            <div class="col-12">
+                <app-info-box [request]="request"></app-info-box>
+            </div>
+        </div>
+        <div class="col-12 lg:col-6 xl:col-6">
+            <p-panel class="filter-panel" header="{{ 'requestSummaryInfo' | translate }}" [toggleable]="false">
+                <app-request-info [viewMode]="true" [completeMode]="false" [formData]="requestInfo"
+                    [category]="category" [channelType]="channelType"></app-request-info>
+            </p-panel>
+        </div>
+    </div>
+
+    <div *ngIf="request" class="grid nested-grid mt-4 align-items-end">
+        <div class="col-12 lg:col-3">
+            <app-template-table [template]="request.template"></app-template-table>
+        </div>
+        <div class="col-12 lg:col-9">
+            <app-offer-box-list *ngIf="offers" [hideButtons]="true" [request]="request" [offerList]="filteredOffers"
+                (offerChanged)="offerChange()"></app-offer-box-list>
+        </div>
+    </div>
+
+</div>
+<div *ngIf="request" class="grid formgrid mt-4">
+    <div class="col-12 lg:col-4">
+        <label> {{ "technicalEvaluation" | translate }}</label>
+        <textarea class="w-full" rows="4" cols="50" [disabled]="true" pInputTextarea [(ngModel)]="request.technicalEvaluation"></textarea>
+    </div>
+    <div class="col-12 lg:col-4">
+        <label> {{ "commercialEvaluation" | translate }}</label>
+        <textarea class="w-full" rows="4" [disabled]="true" cols="50" pInputTextarea
+            [(ngModel)]="request.commercialEvaluation"></textarea>
+    </div>
+    <div class="col-12 lg:col-4">
+        <form [formGroup]="approvalForm">
+            <div class="col-12 md:col-12">
+                <label>Onay / Red Metni</label>
+                <textarea pInputTextarea rows="4" class="w-full" formControlName="comment"></textarea>
+                <app-error-message [control]="approvalForm.get('comment')"></app-error-message>
+            </div>
+            <div class="flex justify-content-end gap-2 my-2">
+                <button pButton type="button" [label]="'reject' | translate" class="orange-button w-8rem"
+                    (click)="sendApproveForm(false)"></button>
+                <button pButton [label]="'approve'| translate" type="submit" class="green-button w-8rem"
+                    (click)="sendApproveForm(true)"></button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+<i class="pi pi-check-square page-icon"></i>
+
+
+<p-panel [header]="'filterCriteria' | translate" [toggleable]="true" styleClass="filter-panel mb-3">
+    <ng-template pTemplate="icons">
+        <button pButton icon="pi pi-filter-slash" (click)="resetFilterForm()" pTooltip="{{ 'clearFilter' | translate }}"
+            tooltipPosition="top" class="orange-button mr-2"></button>
+        <button pButton type="button" icon="pi pi-filter" pTooltip="{{ 'applyFilter' | translate }}"
+            tooltipPosition="top" class="green-button mr-2" (click)="submitFilter()"></button>
+    </ng-template>
+
+    <form [formGroup]="filterForm" (ngSubmit)="submitFilter()" (keydown.enter)="onEnter($event)">
+        <div class="grid formgrid">
+            <div class="field col-12 md:col-3">
+                <label>{{ 'requestCode' | translate }}</label>
+                <input type="text" class="w-full" pInputText formControlName="requestCode">
+            </div>
+            <div class="field col-12 md:col-3">
+                <label>{{ 'requestTitle' | translate }}</label>
+                <input type="text" class="w-full" pInputText formControlName="title">
+            </div>
+            <div class="field col-12 md:col-3">
+                <label>{{ 'requestLocation' | translate }}</label>
+                <p-dropdown styleClass="w-full" formControlName="locationId" [options]="locationOptions"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-3">
+                <label>{{ 'currencyUnit' | translate }}</label>
+                <p-dropdown styleClass="w-full" formControlName="currencyId" [options]="currencyOptions"></p-dropdown>
+            </div>
+        </div>
+    </form>
+</p-panel>
+
+<p-tabMenu [model]="tabItems"></p-tabMenu>
+
+<app-table #table dataKey="tblAllRequests" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="(choosenApprovalStatus === ApprovalStatus.Rejected ?  'rejectRequest' : 'approveRequest') | translate"
+    [modal]="true" [(visible)]="visibleCancellation" [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form [formGroup]="approvalForm" (ngSubmit)="submitApprovalForm()">
+        <div class="formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label>{{(choosenApprovalStatus === ApprovalStatus.Rejected ? 'rejectionReason' : 'comment') |
+                    translate}}</label>
+                <textarea pInputTextarea rows="5" class="w-full" formControlName="comment"></textarea>
+                <app-error-message [control]="approvalForm.get('comment')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="visibleCancellation = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!approvalForm.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>
+
+
+<p-dialog [header]="'uploadContract' | translate"
+    [modal]="true" [(visible)]="displayUploadContract" [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form [formGroup]="uploadContractForm" (ngSubmit)="submitUploadContractForm()">
+        <div class="formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label>Sözleşme Dosyasını Seçin</label>
+                <app-single-file-upload [acceptTypes]="'.doc,.docx'" (fileUploaded)="onFileReceived($event)"></app-single-file-upload>
+                <app-error-message [control]="uploadContractForm.get('file')"></app-error-message>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>{{'startDate' | translate}}</label>
+                <p-calendar appendTo="body" class="three-side-input" styleClass="w-full" [showIcon]="true"
+                formControlName="startDate" dateFormat="dd/mm/yy"></p-calendar>
+                <app-error-message [control]="uploadContractForm.get('startDate')"></app-error-message>
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <label>{{'endDate' | translate}}</label>
+                <p-calendar appendTo="body" class="three-side-input" styleClass="w-full" [showIcon]="true"
+                formControlName="expirationDate" dateFormat="dd/mm/yy"></p-calendar>
+                <app-error-message [control]="uploadContractForm.get('expirationDate')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayUploadContract = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!uploadContractForm.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

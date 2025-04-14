@@ -1,0 +1,129 @@
+<div class="surface-100 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="grid w-9 overflow-hidden grid-nogutter align-items-stretch border-round-3xl bg-white shadow-8">
+        <div class="col-4">
+            <div class="flex flex-column align-items-center justify-content-center h-full image-container">
+                <div *ngIf="!imageLoaded" class="skeleton-container">
+                    <p-skeleton width="20rem" height="2rem" borderRadius="16px" />
+                </div>
+                <!-- Image, shown once loaded -->
+                <img src="assets/layout/images/eticaret.png" alt="Buyersoft" (load)="onImageLoad()"
+                    [ngClass]="{'opacity-0': !imageLoaded, 'opacity-1': imageLoaded}"
+                    class="w-full h-full object-cover" />
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div class="flex flex-column align-items-start justify-content-center h-full py-4">
+                <div class="m-auto mb-4">
+                    <div class="w-full surface-card px-5 sm:px-3">
+                        <div class="text-center">
+                            <div class="text-900 text-3xl font-medium">Tedarikçi Kayıt Formu</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 py-2 w-full">
+                    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                        <div class="formgrid grid">
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "companyName" | translate }}</label>
+                                <input type="text" formControlName="name" pInputText class="w-full">
+
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "email" | translate }}</label>
+                                <input type="text" formControlName="email" pInputText class="w-full">
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "webSite" | translate }}</label>
+                                <p-inputGroup class="w-full">
+                                    <p-inputGroupAddon>www</p-inputGroupAddon>
+                                    <input type="text" formControlName="website" pInputText />
+                                </p-inputGroup>
+
+                            </div>
+
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "name" | translate }}</label>
+                                <input type="text" pInputText class="w-full" formControlName="contactFirstName">
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "surName" | translate }}</label>
+                                <input type="text" pInputText formControlName="contactLastName" class="w-full">
+                            </div>
+
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "phone" | translate }}</label>
+                                <p-inputMask mask="(999) 999 99 99" formControlName="phone" styleClass="w-full" />
+
+                            </div>
+
+                            <div class="field col-12 md:col-4">
+                                <label class="w-full">{{ "password" | translate }}</label>
+                                <p-password formControlName="password" [toggleMask]="true" class="w-full"
+                                    styleClass="w-full" inputStyleClass="w-full"></p-password>
+
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label class="w-full">{{ "rePassword" | translate }}</label>
+                                <p-password formControlName="rePassword" [toggleMask]="true" class="w-full"
+                                    styleClass="w-full" inputStyleClass="w-full"></p-password>
+                            </div>
+                        </div>
+
+                        <div class="formgrid grid">
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "city" | translate }}</label>
+                                <p-dropdown [options]="cityOptions" formControlName="cityId" appendTo="body"
+                                    styleClass="w-full" optionLabel="name" optionValue="id"
+                                    (onChange)="cityChange($event)"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "district" | translate }}</label>
+                                <p-dropdown [options]="districtOptions" formControlName="districtId" appendTo="body"
+                                    optionLabel="name" optionValue="id" styleClass="w-full"></p-dropdown>
+                            </div>
+                            <div class="field col-4">
+                                <label for="address">{{ "address" | translate }}</label>
+                                <textarea id="address" formControlName="address" type="text" rows="3"
+                                    class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
+                            </div>
+                            <div class="field col-12 md:col-8">
+                                <label>{{ "taxAdministration" | translate }}</label>
+                                <p-dropdown [options]="taxOfficeOptions" formControlName="taxAdministration"
+                                    optionLabel="name" optionValue="id" appendTo="body" styleClass="w-full"
+                                    optionLabel="name" optionValue="name"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "taxNumber" | translate }}</label>
+                                <input type="text" pInputText formControlName="taxNumber" class="w-full">
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "mainCategory" | translate }}</label>
+                                <p-dropdown [options]="subCategoryOptions" formControlName="subCategory" appendTo="body"
+                                optionLabel="name"
+                                optionValue="id"
+                                    styleClass="w-full" (onChange)="subCategoryChange($event)"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label>{{ "subCategory" | translate }}</label>
+                                <p-multiSelect appendTo='body' [options]="requestGroupOptions" styleClass="w-full"
+                                    formControlName="requestGroupIdList" optionLabel="name"
+                                    optionValue="id"></p-multiSelect>
+                            </div>
+
+                            <div class="field col-12 md:col-4">
+                                <div class="flex h-full justify-content-end align-items-end">
+                                    <p-button styleClass="bg-orange-400 border-orange-400 hover:bg-orange-600 mr-2"
+                                        [label]="'giveUp' | translate" type="button" [routerLink]="['/']" />
+                                    <p-button type="submit" styleClass="bg-teal-400 border-teal-400 hover:bg-teal-600"
+                                        [label]="'register' | translate" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

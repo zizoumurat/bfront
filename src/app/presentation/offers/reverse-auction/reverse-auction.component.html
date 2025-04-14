@@ -1,0 +1,59 @@
+<svg class="page-icon" width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"
+    stroke-width="3" stroke="#000000" fill="none">
+    <path
+        d="M37.34,7.36a.12.12,0,0,1,.18.13c-.47,1.86-2.78,12.63,5.57,19.62,8.16,6.84,8.41,17.13,2.33,24-7.27,8.23-19.84,6.78-25.25,1.37C16.36,48.69,9.44,36.33,21.29,26a.1.1,0,0,1,.16,0c.29,1.23,2.3,9,7.66,10,.25,0,.37-.11.25-.34C27.78,32.6,20.66,17,37.34,7.36Z"
+        stroke-linecap="round" />
+</svg>
+
+<div *ngIf="request">
+
+    <div *ngIf="reverseAuction" class="grid">
+        <div class="col-12 lg:col-6 xl:col-7">
+            <div class="grid">
+                <div class="col-12 xl:col-7">
+                    <app-count-down-reverse-auction
+                        [initialMinutes]="reverseAuction.minutes * 60"></app-count-down-reverse-auction>
+                </div>
+                <div class="col-12 xl:col-5">
+                    <div class="flex align-items-center h-full">
+                        <button *ngIf="reverseAuction.statu === ReverseAuctionStatusEnum.NotStarted || 
+                    reverseAuction.statu === ReverseAuctionStatusEnum.Paused" pButton icon="pi pi-play"
+                            class="green-button mr-1" label="Oturumu Başlat" (click)="changeStatus(ReverseAuctionStatusEnum.Started)">
+                        </button>
+
+                        <!-- Oturumu Duraklat Butonu -->
+                        <button *ngIf="reverseAuction.statu === ReverseAuctionStatusEnum.Started" pButton
+                            icon="pi pi-pause" class="green-button mr-1" label="Oturumu Duraklat" (click)="changeStatus(ReverseAuctionStatusEnum.Paused)">
+                        </button>
+
+                        <!-- Oturumu Sonlandır Butonu -->
+                        <button *ngIf="reverseAuction.statu === ReverseAuctionStatusEnum.Started || 
+                    reverseAuction.statu === ReverseAuctionStatusEnum.Paused" pButton icon="pi pi-stop-circle"
+                            class="orange-button" label="Oturumu Sonlandır" (click)="changeStatus(ReverseAuctionStatusEnum.Ended)">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 lg:col-4 lg:col-offset-2 xl:col-3">
+            <app-session-parameters [formGroup]="reverseAuctionSessionForm"></app-session-parameters>
+        </div>
+    </div>
+
+    <div class="grid nested-grid mt-4 align-items-end">
+        <div class="col-12 lg:col-3">
+            <app-template-table [showTargetPrices]="true" [template]="request.template"></app-template-table>
+        </div>
+        <div class="col-12 lg:col-9">
+            <app-offer-box-list *ngIf="filteredOffers" [showCompanyName]="true" [isReverseAuction]="true" [request]="request"
+                [offerList]="filteredOffers" (offerChanged)="offerChange()"></app-offer-box-list>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="col-12 lg:col-3 text-right">
+            <button pButton class="green-button" label="Hedef Fiyatları Kaydet" (click)="saveTargetPrices()"></button>
+        </div>
+    </div>
+</div>

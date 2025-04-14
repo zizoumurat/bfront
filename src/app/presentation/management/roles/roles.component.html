@@ -1,0 +1,81 @@
+<i class="pi pi-id-card page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+<div class="flex justify-content-between mb-3">
+    <p-message [text]="'systemRolesCannotBeModifiedOrDeleted' | translate"
+        styleClass="p-mr-2 bg-red-100 text-red-800"></p-message>
+
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addRole' | translate"
+        (click)="handleAdd()"></button>
+</div>
+
+<app-table #table dataKey="tblRoles" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="!selected ? 'Yeni Rol Ekle' : 'Rol Düzenle'" [modal]="true" [(visible)]="displayForm"
+    [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12 xl:col-8">
+                <label>{{'roleName' | translate }}</label>
+                <input pInputText class="w-full" formControlName="name" />
+                <app-error-message [control]="form.get('name')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>
+
+<p-dialog *ngIf="selectedRole" header="{{'permissions' | translate}} - {{selectedRole.name}}" [modal]="true"
+    [(visible)]="displayPermissions" [style]="{ width: '40rem' }" styleClass="form-modal">
+    <div class="grid">
+        <div class="col-5">
+            <p-checkbox binary="true" [disabled]="selectedRole.isSystemRole" [(ngModel)]="allSelected"
+                (onChange)="toggleAllPermissions(allSelected)">
+            </p-checkbox>
+            <label class="ml-2">{{'grandAllPermission' | translate}}</label>
+
+            <hr class="mt-2 mb-2">
+            <div class="overflow-auto">
+                <ul class="permissions-list">
+                    <li class="nav-item" *ngFor="let module of modules; let i = index">
+                        <a class="nav-link pointer" (click)="selectModule(i)"
+                            [ngClass]="{'active': i === selectedModuleIndex}">
+                            {{ translateKey(module.name) | translate }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-7">
+            <p-checkbox binary="true" [disabled]="selectedRole.isSystemRole" [(ngModel)]="allSelectedForModule"
+                (onChange)="toggleAllPermissionsForModule(allSelectedForModule)">
+            </p-checkbox>
+            <label class="ml-2">{{'checkAll' | translate}}</label>
+
+            <hr class="mt-2 mb-2">
+            <div *ngIf="modules[selectedModuleIndex]?.actionList">
+                <div *ngFor="let action of modules[selectedModuleIndex].actionList" class="mb-2">
+                    <p-checkbox binary="true" [disabled]="selectedRole.isSystemRole" [(ngModel)]="action.isSelected"
+                        (onChange)="toggleActionSelection(i, j)">
+                    </p-checkbox>
+                    <label class="ml-2">{{ translateKey(action.name) | translate}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+            (click)="displayPermissions = false"></button>
+
+        <button pButton type="button" [label]="'save'| translate" type="submit" [(disabled)]="selectedRole.isSystemRole"
+            class="green-button w-8rem" (click)="savePermissions()"></button>
+    </ng-template>
+</p-dialog>

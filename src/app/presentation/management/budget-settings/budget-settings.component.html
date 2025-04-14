@@ -1,0 +1,61 @@
+<i class="pi pi-chart-line page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (selectChange)="onSelectChange($event)"
+    (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+
+<div class="flex justify-content-end mb-3">
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addBudget' | translate"
+        (click)="handleAdd()"></button>
+</div>
+
+<app-table #table dataKey="tblBudgets" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="(!selected ? 'addBudget' : 'editBudget') | translate" [modal]="true" [(visible)]="displayForm"
+    [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12 lg:col-6">
+                <label>{{'departmentName' | translate }}</label>
+                <p-dropdown styleClass="w-full" formControlName="departmentId" [options]="departmentList"
+                   ></p-dropdown>
+                <app-error-message [control]="form.get('departmentId')"></app-error-message>
+            </div>
+            <div class="field col-12 xl:col-6">
+                <label>{{'budgetTitle' | translate }}</label>
+                <input pInputText class="w-full" formControlName="budgetTitle" />
+                <app-error-message [control]="form.get('budgetTitle')"></app-error-message>
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label>{{'currency' | translate }}</label>
+                <p-dropdown styleClass="w-full" appendTo="body" formControlName="currencyId" [options]="currencyList"
+                    (onChange)="currencyChange($event)"></p-dropdown>
+                <app-error-message [control]="form.get('currencyId')"></app-error-message>
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label>{{'budgetLimit' | translate}}</label>
+                <p-inputNumber mode="currency" [currency]="selectedCurrency" id="customSubject"
+                    formControlName="budgetLimit" styleClass="w-full" inputStyleClass="w-full"
+                    class="w-full"></p-inputNumber>
+                <app-error-message [control]="form.get('budgetLimit')"></app-error-message>
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label>{{'startDate' | translate }}</label>
+                <p-calendar appendTo="body" class="three-side-input" styleClass="w-full" [showIcon]="true"
+                    formControlName="startDate" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label>{{'endDate' | translate }}</label>
+                <p-calendar appendTo="body" class="three-side-input" styleClass="w-full" [showIcon]="true"
+                    formControlName="endDate" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="displayForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

@@ -1,0 +1,60 @@
+@mixin custom-checkbox($bg-color, $highlight-color) {
+    .p-checkbox-box {
+        background-color: $bg-color !important;
+        border-color: $bg-color !important;
+        border-width: 2px;
+
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        &:hover {
+            background-color: darken($bg-color, 10%) !important; 
+            border-color: darken($bg-color, 10%) !important;
+        }
+
+        &.p-highlight {
+            background-color: darken($highlight-color, 10%) !important; 
+            border-color: darken($highlight-color, 10%) !important;
+        }
+    }
+
+    .p-checkbox-icon {
+        color: #fff !important;
+    }
+
+    label {
+        background-color: $bg-color;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 4px;
+        width: 100%; 
+        margin-left: 8px;
+    }
+}
+
+::ng-deep {
+    .custom-checkbox {
+        display: flex;
+        align-items: center; 
+        margin-bottom: 12px;  
+
+        &.blue {
+            @include custom-checkbox(#7a9ef1, #6088d7);  
+        }
+
+        &.pink {
+            @include custom-checkbox(#f087b5, #e06d97); 
+        }
+
+        &.green {
+            @include custom-checkbox(#90e3b5, #71c292);
+        }
+    }
+
+    .checkbox-group {
+        margin-bottom: 20px;  
+    }
+
+}

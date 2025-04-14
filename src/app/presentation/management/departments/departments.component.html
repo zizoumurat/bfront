@@ -1,0 +1,30 @@
+<i class="pi pi-sitemap page-icon"></i>
+
+<app-filter-panel [filterConfig]="filterFields" (searchObjectChange)="updateSearchObject($event)"></app-filter-panel>
+
+<div class="flex justify-content-end mb-3">
+    <button pButton class="orange-button" icon="pi pi-plus" [label]="'addDepartment' | translate"
+        (click)="handleAdd()"></button>
+</div>
+
+<app-table #table dataKey="tblDepartments" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="!selected ? 'Yeni Departman Ekle' : 'Departman Düzenle'" [modal]="true" [(visible)]="displayForm"
+    [style]="{ width: '22rem' }" styleClass="form-modal">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-12">
+                <label>{{'departmentName' | translate}}</label>
+                <input pInputText class="w-full" formControlName="name" />
+                <app-error-message [control]="form.get('name')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-6"
+                (click)="displayForm = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!form.valid"
+                class="green-button w-6"></button>
+        </div>
+    </form>
+</p-dialog>

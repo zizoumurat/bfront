@@ -1,0 +1,20 @@
+<p-panel class="filter-panel" header="{{ 'reqGatSummary' | translate }}" [toggleable]="false">
+    <p-table [value]="offerSummary.rows" styleClass="p-datatable-gridlines p-datatable-striped default-table">
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngFor="let column of coloredColumns" [ngClass]="[column.cssClass]">
+                    <span>{{ column.label | translate }}</span>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+            <tr>
+                <td *ngFor="let column of coloredColumns" class="text-center">
+                    <div class="flex flex-column"
+                        [innerHTML]="item[column.field] | formatColumn: column.type : offerSummary?.currencyCode">
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-panel>

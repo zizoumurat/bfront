@@ -1,0 +1,33 @@
+.reverse-auction-container {
+    display: grid;
+    grid-template-columns: 1fr; /* Varsayılan olarak tek sütun */
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .reverse-auction-container {
+        grid-template-columns: 1fr 1fr; /* Daha büyük ekranlarda iki sütun */
+        align-items: center;
+    }
+}
+
+.countdown-container {
+    text-align: center; /* Geri sayım bileşeni ortalanır */
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap; /* Butonlar taşarsa alt satıra geçer */
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+button {
+    flex-grow: 1; /* Butonlar eşit genişlik alır */
+}
+
+@media (min-width: 768px) {
+    button {
+        flex-grow: 0; /* Daha büyük ekranlarda otomatik boyutlanır */
+    }
+}

@@ -1,0 +1,60 @@
+<svg class="page-icon" width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"
+    stroke-width="3" stroke="#000000" fill="none">
+    <path
+        d="M37.34,7.36a.12.12,0,0,1,.18.13c-.47,1.86-2.78,12.63,5.57,19.62,8.16,6.84,8.41,17.13,2.33,24-7.27,8.23-19.84,6.78-25.25,1.37C16.36,48.69,9.44,36.33,21.29,26a.1.1,0,0,1,.16,0c.29,1.23,2.3,9,7.66,10,.25,0,.37-.11.25-.34C27.78,32.6,20.66,17,37.34,7.36Z"
+        stroke-linecap="round" />
+</svg>
+
+<p-panel [header]="'requestSelection' | translate" [toggleable]="true" styleClass="filter-panel mb-3">
+    <ng-template pTemplate="icons">
+        <button pButton icon="pi pi-filter-slash" (click)="resetFilterForm()" pTooltip="{{ 'clearFilter' | translate }}"
+            tooltipPosition="top" class="orange-button mr-2"></button>
+        <button pButton type="button" icon="pi pi-filter" pTooltip="{{ 'applyFilter' | translate }}"
+            tooltipPosition="top" class="green-button mr-2" (click)="submitFilter()"></button>
+    </ng-template>
+
+    <form [formGroup]="filterForm" (ngSubmit)="submitFilter()" (keydown.enter)="onEnter($event)">
+        <div class="grid formgrid">
+            <div class="field col-12 md:col-3">
+                <label>{{ 'requestCode' | translate }}</label>
+                <input type="text" class="w-full" pInputText formControlName="requestCode">
+            </div>
+            <div class="field col-12 md:col-3">
+                <label>{{ 'requestTitle' | translate }}</label>
+                <input type="text" class="w-full" pInputText formControlName="title">
+            </div>
+            <div class="field col-12 md:col-3">
+                <label>{{ 'requestLocation' | translate }}</label>
+                <p-dropdown styleClass="w-full" formControlName="locationId" [options]="locationOptions"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-3">
+                <label>{{ 'currencyUnit' | translate }}</label>
+                <p-dropdown styleClass="w-full" formControlName="currencyId" [options]="currencyOptions"></p-dropdown>
+            </div>
+        </div>
+    </form>
+</p-panel>
+
+
+<app-table #table dataKey="tblAllRequests" [service]="service" [columns]="columns" [actionItems]="actionItems"
+    [searchObject]="searchObject"></app-table>
+
+<p-dialog [header]="'cancelOfferCollectionProcess' | translate" [modal]="true" [(visible)]="visibleCancellation"
+    [style]="{ width: '40rem' }" styleClass="form-modal">
+    <form [formGroup]="cancellationForm" (ngSubmit)="submitCancel()">
+        <div class="formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label>{{'cancellationReasion' | translate}}</label>
+                <textarea pInputTextarea rows="5" class="w-full"
+                    formControlName="cancellationReasion"></textarea>
+                <app-error-message [control]="cancellationForm.get('cancellationReasion')"></app-error-message>
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <button pButton type="button" [label]="'giveUp' | translate" class="orange-button w-8rem"
+                (click)="visibleCancellation = false"></button>
+            <button pButton [label]="'save'| translate" type="submit" [disabled]="!cancellationForm.valid"
+                class="green-button w-8rem"></button>
+        </div>
+    </form>
+</p-dialog>

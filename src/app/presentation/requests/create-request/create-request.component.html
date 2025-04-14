@@ -1,0 +1,104 @@
+<p-card>
+    <p-steps [model]="stepItems" [readonly]="true" [activeIndex]="step - 1" />
+</p-card>
+
+<p-card *ngIf="fetched" styleClass="mt-4">
+    <app-request-info *ngIf="step === 1" [viewMode]="viewMode" [completeMode]="completeMode" [formData]="requestInfo"
+        [category]="category" [channelType]="channelType"></app-request-info>
+    <app-request-template *ngIf="step === 2" [viewMode]="viewMode" [formData]="requestTemplate"
+        [category]="category"></app-request-template>
+
+    <div *ngIf="step === 3">
+        <app-request-info [formData]="requestInfo" [viewMode]="viewMode" [completeMode]="completeMode"
+            [category]="category" [channelType]="channelType"></app-request-info>
+        <app-request-template [formData]="requestTemplate" [viewMode]="viewMode"
+            [category]="category"></app-request-template>
+    </div>
+
+</p-card>
+
+<div *ngIf="!viewMode && !completeMode" class="grid mt-4">
+    <div class="col-12">
+        <div class="flex justify-content-end">
+            <button *ngIf="step > 1" pButton icon="pi pi-arrow-left" iconPos="right" [label]="'prev' | translate"
+                class="mr-2 green-button" (click)="goToStep(step-1)"></button>
+            <button *ngIf="step < 3" pButton icon="pi pi-arrow-right" iconPos="right" [label]="'next' | translate"
+                class="mr-2 green-button" (click)="goToStep(step+1)"></button>
+
+            <button *ngIf="step === 3" pButton [label]="'sendRequest' | translate" class="orange-button"
+                (click)="submitRequest()"></button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="completeMode" class="grid">
+    <div class="col-3 col-offset-9 mt-4">
+        <button pButton class="green-button w-full" [label]="'collectQuote' | translate"
+            (click)="startBidCollectionHandle()"></button>
+    </div>
+</div>
+
+<p-dialog [header]="'collectQuote' | translate" [(visible)]="displayStartModal" [modal]="true"
+    [style]="{ width: '45vw' }">
+    <div class="grid formgrid mt-3">
+        <div class="col-6 mt-4">
+            <label for="">Talep Şablonu</label>
+            <span class="p-inputtext block mt-2">{{templateName}}</span>
+        </div>
+        <div class="col-6 mt-4">
+            <label for="">Talep Grubu</label>
+            <span class="p-inputtext block mt-2">{{requestGroupName}}</span>
+        </div>
+        <div class="col-6 mt-4">
+            <label>Şehir</label>
+            <p-dropdown styleClass="w-full mt-2" [options]="cityOptions" [(ngModel)]="cityId"></p-dropdown>
+        </div>
+        <div class="col-6  mt-4">
+            <div class="flex align-items-end h-full">
+                <button pButton [label]="'findSupplier' | translate" type="button" class="green-button w-full"
+                    (click)="findSuppliers()"></button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="findedSuppliers" class="mt-5">
+        <p-table [value]="findedSuppliers" [(selection)]="selectedSuppliers" selectionMode="multiple" dataKey="id">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Firma Adı</th>
+                    <th>Buyersoft Puanı</th>
+                    <th>Kullanıcı Puanı</th>
+                    <th>Email</th>
+                    <th></th>
+                    <th style="min-width: 10px">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-provider>
+                <tr>
+                    <td>{{provider.name}}</td>
+                    <td> <p-rating [(ngModel)]="provider.buyersoftRating" name="providerPoint" [readonly]="true"
+                            [cancel]="false"></p-rating>
+                    <td> <p-rating [(ngModel)]="provider.userRating" name="customerPoint" [readonly]="true"
+                            [cancel]="false"></p-rating>
+                    </td>
+                    <td>{{provider.email}}</td>
+                    <td class="text-center"><p-tag
+                            [value]="(provider.channel === 1 ? 'companySupplierPortfolio' : 'buyersoftSupplierDatabase') | translate"
+                            [severity]="provider.channel === 1 ? 'success' : 'danger'"></p-tag></td>
+                    <td style="min-width: 10px">
+                        <p-tableCheckbox [value]="provider"></p-tableCheckbox>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="grid mt-5">
+            <div class="col-6 col-offset-6">
+                <button type="button" pButton label="Seçimleri Uygula ve Teklif Topla" class="green-button w-full"
+                    [disabled]="!selectedSuppliers || selectedSuppliers?.length === 0"
+                    (click)="startBidCollenction()"></button>
+            </div>
+        </div>
+    </div>
+</p-dialog>
